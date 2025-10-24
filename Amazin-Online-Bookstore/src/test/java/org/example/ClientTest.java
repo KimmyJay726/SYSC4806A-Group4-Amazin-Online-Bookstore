@@ -6,73 +6,73 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-public class UserTest {
-    private User user1;
+public class ClientTest {
+    private Client client;
 
     @BeforeEach
     public void setUp() {
-        user1 = new User("Alice_T", "PerfectPassword", false);
-        user1.setId(101);
+        client = new Client("Alice_T", "PerfectPassword", false);
+        client.setId(101);
     }
 
     @Test
     void testGetId() {
-        Assertions.assertEquals(101, user1.getId());
+        Assertions.assertEquals(101, client.getId());
     }
 
     @Test
     void testIsOwner(){
-        Assertions.assertFalse(user1.getIsOwner());
+        Assertions.assertFalse(client.getIsOwner());
     }
 
     @Test
     void testGetUsername(){
-        Assertions.assertEquals("Alice_T", user1.getUsername());
+        Assertions.assertEquals("Alice_T", client.getUsername());
     }
 
     @Test
     void testGetPassword(){
-        Assertions.assertEquals("PerfectPassword", user1.getPassword());
+        Assertions.assertEquals("PerfectPassword", client.getPassword());
     }
 
     @Test
     void testGetShoppingCart() {
-        Assertions.assertNotNull(user1.getShoppingCart());
+        Assertions.assertNotNull(client.getShoppingCart());
     }
 
     @Test
     void testGetPurchasedBooks() {
-        Assertions.assertNotNull(user1.getPurchasedBooks());
+        Assertions.assertNotNull(client.getPurchasedBooks());
     }
 
     @Test
     void testSetId(){
-        user1.setId(102);
-        Assertions.assertEquals(102, user1.getId());
+        client.setId(102);
+        Assertions.assertEquals(102, client.getId());
     }
 
     @Test
     void testSetIsOwner(){
-        user1.setIsOwner(true);
-        Assertions.assertTrue(user1.getIsOwner());
+        client.setIsOwner(true);
+        Assertions.assertTrue(client.getIsOwner());
     }
 
     @Test
     void testSetUsername(){
-        user1.setUsername("Alice_v2");
-        Assertions.assertEquals("Alice_v2", user1.getUsername());
+        client.setUsername("Alice_v2");
+        Assertions.assertEquals("Alice_v2", client.getUsername());
     }
 
     @Test
     void testSetPassword(){
-        user1.setPassword("PerfectPassword123!");
-        Assertions.assertEquals("PerfectPassword123!", user1.getPassword());
+        client.setPassword("PerfectPassword123!");
+        Assertions.assertEquals("PerfectPassword123!", client.getPassword());
     }
 
     @Test
     void testAddToShoppingCart(){
         // Cart should start empty
-        Assertions.assertEquals(0, user1.getShoppingCart().size());
+        Assertions.assertEquals(0, client.getShoppingCart().size());
 
         // Create a book
         File picture1 = new File("pictures/The-road.jpg");
@@ -85,9 +85,9 @@ public class UserTest {
         );
 
         // Add the book to the cart
-        user1.addToShoppingCart(book1);
-        Assertions.assertEquals(1, user1.getShoppingCart().size());
-        Assertions.assertTrue(user1.getShoppingCart().contains(book1));
+        client.addToShoppingCart(book1);
+        Assertions.assertEquals(1, client.getShoppingCart().size());
+        Assertions.assertTrue(client.getShoppingCart().contains(book1));
     }
 
     @Test
@@ -103,19 +103,19 @@ public class UserTest {
         );
 
         // Add the book to the cart
-        user1.addToShoppingCart(book1);
-        Assertions.assertEquals(1, user1.getShoppingCart().size());
+        client.addToShoppingCart(book1);
+        Assertions.assertEquals(1, client.getShoppingCart().size());
 
         // Remove the book from cart
-        user1.removeFromShoppingCart(book1);
-        Assertions.assertEquals(0, user1.getShoppingCart().size());
-        Assertions.assertFalse(user1.getShoppingCart().contains(book1));
+        client.removeFromShoppingCart(book1);
+        Assertions.assertEquals(0, client.getShoppingCart().size());
+        Assertions.assertFalse(client.getShoppingCart().contains(book1));
     }
 
     @Test
     void testAddToPurchasedBooks(){
         // Purchased books should start empty
-        Assertions.assertEquals(0, user1.getPurchasedBooks().size());
+        Assertions.assertEquals(0, client.getPurchasedBooks().size());
 
         // Create a book
         File picture1 = new File("pictures/The-road.jpg");
@@ -128,8 +128,8 @@ public class UserTest {
         );
 
         // Add the book to purchase list
-        user1.addToPurchasedBooks(book1);
-        Assertions.assertEquals(1, user1.getPurchasedBooks().size());
-        Assertions.assertTrue(user1.getPurchasedBooks().contains(book1));
+        client.addToPurchasedBooks(book1);
+        Assertions.assertEquals(1, client.getPurchasedBooks().size());
+        Assertions.assertTrue(client.getPurchasedBooks().contains(book1));
     }
 }

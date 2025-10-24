@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8e29c5f3-c51c-4af9-8950-a2e09ed70115" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/test/java/org/example/UserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SYSC4806A-Group4-Amazin-Online-Bookstore.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SYSC4806A-Group4-Amazin-Online-Bookstore.iml" afterDir="false" />
+    <list default="true" id="8e29c5f3-c51c-4af9-8950-a2e09ed70115" name="Changes" comment="feat: Create User class and tests">
+      <change afterPath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/ClientController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/ClientRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/test/java/org/example/UserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Amazin-Online-Bookstore/src/test/java/org/example/ClientTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,9 +20,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit5 Test Class" />
-        <option value="Interface" />
         <option value="HTML File" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -57,6 +58,7 @@
     "JUnit.BookTest.executor": "Run",
     "JUnit.BookTest.testBook.executor": "Run",
     "JUnit.BookTest.testGetBookISBN.executor": "Debug",
+    "JUnit.ClientTest.executor": "Run",
     "JUnit.UserTest.executor": "Run",
     "Maven.Amazin-Online-Bookstore [package].executor": "Run",
     "Maven.Amazin-Online-Bookstore [verify].executor": "Run",
@@ -188,20 +190,24 @@
       <option name="presentableId" value="Default" />
       <updated>1760465765042</updated>
     </task>
+    <task id="LOCAL-00001" summary="feat: Create User class and tests">
+      <option name="closed" value="true" />
+      <created>1761313381008</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1761313381008</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: Create User class and tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Create User class and tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/Main.java</url>
-          <line>7</line>
-          <properties class="org.example.Main" method="main">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/Amazin-Online-Bookstore/src/main/java/org/example/Book.java</url>
           <line>112</line>
