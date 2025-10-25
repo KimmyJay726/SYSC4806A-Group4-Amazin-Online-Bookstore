@@ -26,12 +26,13 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        working-directory: './Amazin-Online-Bookstore'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/Amazin-Online-Bookstore/target/*.jar' 
 
   deploy:
     runs-on: windows-latest
@@ -60,4 +61,5 @@ jobs:
           app-name: 'Amazin-Online-Bookstore-Group4'
           slot-name: 'Production'
           package: '*.jar'
+
           
