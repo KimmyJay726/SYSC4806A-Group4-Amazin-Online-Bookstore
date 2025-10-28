@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page - Nexus</title>
+    <link rel="stylesheet" href="/mainpage.css">
 </head>
 <body>
-    <h1>Welcome to the Amazin-Online-Bookstore!</h1>
-    <p>This is the homepage.</p>
+
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            Amazin Online Bookstore
+        </div>
+    </div>
+
+    <div class="user-info-group">
+        <div class="logged-in-as">
+            Logged in as: **Guest User**
+        </div>
+
+        <button class="login-button" onclick="window.location.href='/login-register'">
+            Login / Register
+        </button>
+    </div>
+</header>
+
+<div class="content">
+    <h1>Welcome to the Amazin Online Bookstore Nexus! 🌐</h1>
+    <p>Select a feature below to get started.</p>
+
+    <div class="feature-buttons">
+
+        <a href="/search" class="feature-button button-purchase">
+            **START PURCHASING** (Temp)
+            <span class="button-note">(Route to Search Page)</span>
+        </a>
+
+        <a href="/inventory" class="feature-button button-browse">
+            **BROWSE CATALOG** (Temp)
+            <span class="button-note">(Route to Inventory Page)</span>
+        </a>
+
+        <a href="/recommendations" class="feature-button button-recs">
+            **YOUR RECOMMENDATIONS** (Temp)
+            <span class="button-note">(Route to Login page if not logged in)</span>
+        </a>
+
+    </div>
+</div>
+
 </body>
 </html>
