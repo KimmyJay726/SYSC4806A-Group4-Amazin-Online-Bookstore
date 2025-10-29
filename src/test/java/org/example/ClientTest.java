@@ -87,7 +87,7 @@ public class ClientTest {
         // Add the book to the cart
         client.addToShoppingCart(book1);
         Assertions.assertEquals(1, client.getShoppingCart().size());
-        Assertions.assertTrue(client.getShoppingCart().contains(book1));
+        Assertions.assertTrue(client.getShoppingCart().contains(book1.getId()));
     }
 
     @Test
@@ -130,6 +130,6 @@ public class ClientTest {
         // Add the book to purchase list
         client.addToPurchasedBooks(book1);
         Assertions.assertEquals(1, client.getPurchasedBooks().size());
-        Assertions.assertTrue(client.getPurchasedBooks().contains(book1));
+        Assertions.assertTrue(client.getPurchasedBooks().contains(book1.getId()));
     }
 }
