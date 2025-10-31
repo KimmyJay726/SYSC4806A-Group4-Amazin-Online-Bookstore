@@ -144,8 +144,11 @@ public class BookController {
 
         Optional<Book> purchaseBook = bookRepository.findById(id);
 
-        purchaseBook.ifPresent(value -> value.setNumBooksAvailableForPurchase(value.getNumBooksAvailableForPurchase()-1));
-
+        if (purchaseBook.isPresent()) {
+            if (purchaseBook.get().getNumBooksAvailableForPurchase() >= 1) {
+                purchaseBook.get().setNumBooksAvailableForPurchase(purchaseBook.get().getNumBooksAvailableForPurchase()-1);
+            }
+        }
          bookRepository.save(purchaseBook.get());
 
         return ResponseEntity.ok(purchaseBook.get());
