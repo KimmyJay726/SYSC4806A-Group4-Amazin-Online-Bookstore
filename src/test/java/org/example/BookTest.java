@@ -18,11 +18,13 @@ public class BookTest {
         picture2 = new File("pictures/The-road-alternate.jpg");
 
         book1 = new Book(
+                "The Road",
                 "0-307-26543-9",
                 picture1,
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
-                "Alfred A. Knopf"
+                "Alfred A. Knopf",
+                10
         );
     }
 
@@ -30,6 +32,9 @@ public class BookTest {
     void testBook() {
         Assertions.assertNotNull(book1);
     }
+
+    @Test
+    void testGetBookTitle() { Assertions.assertEquals("The Road", book1.getBookTitle()); }
 
     @Test
     void testGetBookISBN() {
@@ -54,6 +59,15 @@ public class BookTest {
     @Test
     void testGetBookPublisher() {
         Assertions.assertEquals("Alfred A. Knopf", book1.getBookPublisher());
+    }
+
+    @Test
+    void testGetNumBooksAvailableForPurchase() { Assertions.assertEquals(10, book1.getNumBooksAvailableForPurchase()); }
+
+    @Test
+    void testSetBookTitle() {
+        book1.setBookTitle("The Long Road");
+        Assertions.assertEquals("The Long Road", book1.getBookTitle());
     }
 
     @Test
@@ -84,5 +98,11 @@ public class BookTest {
     void testSetBookPublisher() {
         book1.setBookPublisher("Penguin Random House");
         Assertions.assertEquals("Penguin Random House", book1.getBookPublisher());
+    }
+
+    @Test
+    void testSetNumBooksAvailableForPurchase() {
+        book1.setNumBooksAvailableForPurchase(5);
+        Assertions.assertEquals(5, book1.getNumBooksAvailableForPurchase());
     }
 }

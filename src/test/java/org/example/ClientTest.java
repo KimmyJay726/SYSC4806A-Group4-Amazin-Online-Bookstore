@@ -77,11 +77,13 @@ public class ClientTest {
         // Create a book
         File picture1 = new File("pictures/The-road.jpg");
         Book book1 = new Book(
+                "The Road",
                 "0-307-26543-9",
                 picture1,
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
-                "Alfred A. Knopf"
+                "Alfred A. Knopf",
+                10
         );
 
         // Add the book to the cart
@@ -95,11 +97,13 @@ public class ClientTest {
         // Create a book
         File picture1 = new File("pictures/The-road.jpg");
         Book book1 = new Book(
+                "The Road",
                 "0-307-26543-9",
                 picture1,
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
-                "Alfred A. Knopf"
+                "Alfred A. Knopf",
+                10
         );
 
         // Add the book to the cart
@@ -120,11 +124,13 @@ public class ClientTest {
         // Create a book
         File picture1 = new File("pictures/The-road.jpg");
         Book book1 = new Book(
+                "The Road",
                 "0-307-26543-9",
                 picture1,
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
-                "Alfred A. Knopf"
+                "Alfred A. Knopf",
+                10
         );
 
         // Add the book to purchase list
