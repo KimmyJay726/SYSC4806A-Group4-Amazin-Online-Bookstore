@@ -22,11 +22,8 @@ public class Client {
     private String username;
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Book> shoppingCart = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Book> purchasedBooks = new ArrayList<>();
+    private List<Long> shoppingCartIds = new ArrayList<>();
+    private List<Long> purchasedBookIds = new ArrayList<>();
 
     /**
      * Create a basic Client object
@@ -68,12 +65,12 @@ public class Client {
     /**
      * @return the contents of the client's shopping cart
      */
-    public List<Book> getShoppingCart() { return shoppingCart; }
+    public List<Long> getShoppingCart() { return shoppingCartIds; }
 
     /**
      * @return the books that the client has purchased
      */
-    public List<Book> getPurchasedBooks() { return purchasedBooks; }
+    public List<Long> getPurchasedBooks() { return purchasedBookIds; }
 
     /**
      * Set a client's id manually
@@ -101,32 +98,32 @@ public class Client {
 
     /**
      * Set a client's shopping cart contents
-     * @param shoppingCart the books in the client's shopping cart
+     * @param shoppingCartIds the books in the client's shopping cart
      */
-    public void setShoppingCart(List<Book> shoppingCart) {this.shoppingCart = shoppingCart;}
+    public void setShoppingCart(List<Long> shoppingCartIds) {this.shoppingCartIds = shoppingCartIds;}
 
     /**
      * Set a client's purchased books
-     * @param purchasedBooks the books purchased by the client
+     * @param purchasedBookIds the books purchased by the client
      */
-    public void setPurchasedBooks(List<Book> purchasedBooks) {this.purchasedBooks = purchasedBooks;}
+    public void setPurchasedBooks(List<Long> purchasedBookIds) {this.purchasedBookIds = purchasedBookIds;}
 
     /**
      * Add a book to the client's shopping cart
      * @param book the book to add
      */
-    public void addToShoppingCart(Book book) { this.shoppingCart.add(book); }
+    public void addToShoppingCart(Book book) { this.shoppingCartIds.add(book.getId()); }
 
     /**
      * Remove a book from the client's shopping cart
      * @param book the book to remove
      */
-    public void removeFromShoppingCart(Book book) { this.shoppingCart.remove(book); }
+    public void removeFromShoppingCart(Book book) { this.shoppingCartIds.remove(book.getId()); }
 
     /**
      * Add a book to the client's purchased books
      * @param book the purchased book
      */
-    public void addToPurchasedBooks(Book book) { this.purchasedBooks.add(book); }
+    public void addToPurchasedBooks(Book book) { this.purchasedBookIds.add(book.getId()); }
 
 }
