@@ -17,11 +17,14 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private String bookTitle;
     private String bookISBN;
     private File bookPicture;
     private String bookDescription;
     private String bookAuthor;
     private String bookPublisher;
+
+    private Integer numBooksAvailableForPurchase;
 
     /**
      * Create Book object
@@ -30,27 +33,33 @@ public class Book {
 
     /**
      * Create a book object
+     * @param author the author of the book
      * @param ISBN the ISBN of the book
      * @param picture the picture of the book on the website
      * @param description the description of the book on the website
      * @param author the author of the book
      * @param publisher the publisher of the book
+     * @param numBooks the number of copies of the book available for purchase
      */
-    public Book(String ISBN, File picture, String description, String author, String publisher) {
+    public Book(String title, String ISBN, File picture, String description, String author, String publisher, Integer numBooks) {
+        bookTitle = title;
         bookISBN = ISBN;
         bookPicture = picture;
         bookDescription = description;
         bookAuthor = author;
         bookPublisher = publisher;
+        numBooksAvailableForPurchase = numBooks;
     }
-
-    /// TODO: Add attribute Inventory bookInventory to class
-    /// this will connect instances of Book to instances of Inventory
 
     /**
      * @return the unique id of a book
      */
     public long getId() { return id; }
+
+    /**
+     * @return the title of a book
+     */
+    public String getBookTitle() { return bookTitle; }
 
     /**
      * @return the ISBN of a book
@@ -75,10 +84,21 @@ public class Book {
     public String getBookPublisher() { return this.bookPublisher; }
 
     /**
+     * @return the number of copies of the book available for purchase
+     */
+    public Integer getNumBooksAvailableForPurchase() { return this.numBooksAvailableForPurchase; }
+
+    /**
      * Set a book's id manually
      * @param id the unique identifier of a book
      */
     public void setId(long id) { this.id = id; }
+
+    /**
+     * Set a book's title
+     * @param title the title of a book
+     */
+    public void setBookTitle(String title) { this.bookTitle = title; }
 
     /**
      * Set a book's ISBN
@@ -108,5 +128,12 @@ public class Book {
      * Set a book's publisher
      * @param publisher the publisher of a book
      */
-    public  void setBookPublisher(String publisher) { this.bookPublisher = publisher; }
+    public void setBookPublisher(String publisher) { this.bookPublisher = publisher; }
+
+    /**
+     * Set a book's number of copies available for purchase
+     * @param numBooks the number of copies of a book
+     */
+    public void setNumBooksAvailableForPurchase(Integer numBooks) { this.numBooksAvailableForPurchase = numBooks; }
 }
+
