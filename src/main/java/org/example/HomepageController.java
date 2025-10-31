@@ -10,4 +10,9 @@ public class HomepageController {
     public String homepage() {
         return "index";  // Find the html template at src/main/resources/templates/index.html
     }
+
+    @GetMapping("/login-register")
+    public String signOn() {
+        return "login-register";  // Find the html template at src/main/resources/templates/login-register.html
+    }
 }

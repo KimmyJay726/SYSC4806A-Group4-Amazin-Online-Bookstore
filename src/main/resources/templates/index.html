@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page - Nexus</title>
-    <link rel="stylesheet" href="/mainpage.css">
+    <link rel="stylesheet" href="/css/mainpage.css">
 </head>
 <body>
 
@@ -15,13 +15,11 @@
             Amazin Online Bookstore
         </div>
     </div>
-
     <div class="user-info-group">
         <div class="logged-in-as">
-            Logged in as: **Guest User**
+            Logged in as: <span id="usernameDisplay">Guest User</span>
         </div>
-
-        <button class="login-button" onclick="window.location.href='/login-register'">
+        <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
             Login / Register
         </button>
     </div>
@@ -50,6 +48,12 @@
 
     </div>
 </div>
+
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Main site JavaScript -->
+<script src="/js/index.js"></script>
 
 </body>
 </html>

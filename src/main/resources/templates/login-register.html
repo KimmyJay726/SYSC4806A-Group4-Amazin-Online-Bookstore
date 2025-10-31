@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Sign Up</title>
+    <link rel="stylesheet" href="/css/login-register.css">
+</head>
+<body>
+
+<div class="container">
+    <!-- Login Form -->
+    <form id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username" required />
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <button class="submit-btn" type="submit">Login</button>
+        <button class="toggle-btn" type="button" id="showSignup">Don’t have an account? Sign up!</button>
+        <div id="loginMessage" class="error hidden"></div>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="hidden">
+        <h2>Sign Up</h2>
+        <input type="text" id="signupUsername" placeholder="Choose a username" required />
+        <input type="password" id="signupPassword" placeholder="Choose a password" required />
+        <button class="submit-btn" type="submit">Register</button>
+        <button class="toggle-btn" type="button" id="showLogin">Already have an account? Log in!</button>
+        <div id="signupMessage" class="error hidden"></div>
+    </form>
+
+</div>
+
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Main site JavaScript -->
+<script src="/js/login-register.js"></script>
+
+</body>
+</html>
