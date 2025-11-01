@@ -25,7 +25,52 @@
 <hr>
 
 <body>
+<main class="edit-book-container">
+    <h2>Edit Book Details</h2>
 
+    <form id="editBookForm">
+        <div class="form-group">
+            <label for="isbn">ISBN:</label>
+            <input type="text" id="isbn" name="bookISBN" th:value="${book.bookISBN}">
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="bookTitle" th:value="${book.bookISBN}">
+        </div>
+
+        <div class="form-group">
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="bookAuthor" th:value="${book.bookISBN}">
+        </div>
+
+        <div class="form-group">
+            <label for="publisher">Publisher:</label>
+            <input type="text" id="publisher" name="bookPublisher" th:value="${book.bookISBN}">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="bookDescription" rows="3" th:text="${book.bookDescription}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="bookPicture">Book Picture:</label>
+            <input type="file" id="bookPicture" name="bookPicture">
+            <div class="preview">
+                <img th:if="${book.bookPicture != null}"
+                     th:src="@{/pictures/{file}(file=${book.bookPicture})}"
+                     alt="Current Book Image"
+                     width="120">
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="save-btn">Save Changes</button>
+            <button type="button" class="cancel-btn" onclick="window.location.href='/browse'">Cancel</button>
+        </div>
+    </form>
+</main>
 </body>
 
 </html>
