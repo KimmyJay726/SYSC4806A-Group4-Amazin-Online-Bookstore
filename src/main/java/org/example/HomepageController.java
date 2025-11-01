@@ -1,6 +1,7 @@
 package org.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,11 @@ public class HomepageController {
     private BookRepository bookRepository;
 
     @GetMapping("/")
-    public String homepage() {
+    public String homepage(HttpSession session, Model model) {
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client != null) {
+            model.addAttribute("client", client);
+        }
         return "index";  // Find the html template at src/main/resources/templates/index.html
     }
 
@@ -30,7 +35,14 @@ public class HomepageController {
             @RequestParam(required = false) String author,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String publisher,
+            HttpSession session,
             Model model) {
+
+        // Add client information for navbar
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client != null) {
+            model.addAttribute("client", client);
+        }
 
         List<Book> books;
 

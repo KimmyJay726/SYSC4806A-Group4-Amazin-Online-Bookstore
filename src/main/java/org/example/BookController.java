@@ -6,14 +6,22 @@
 
 package org.example;
 
+import jakarta.servlet.http.HttpSession;
 import org.hibernate.boot.model.internal.CreateKeySecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,39 +32,42 @@ public class BookController {
     private BookRepository bookRepository;
 
     /**
-     * GET /books/{id}
-     * Returns a JSON Book object based on the ID.
-     *
-     * Example curl command for Windows:
-     * -------------------------------------------
-     * curl.exe -i -X GET -H "Accept: application/json" http://localhost:8080/books/1
-     * -------------------------------------------
-     *
-     * Expected JSON response:
-     * -------------------------------------------
-     * {"id":1,"bookTitle":"The Road","bookISBN":"XXXXX","bookPicture":null,"bookDescription":"This is a very sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":10
-     * -------------------------------------------
+     * GET /books/all
+     * Returns a JSON list of all books.
      */
-    @GetMapping("/books/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable(value = "id") Integer id) {
-        return bookRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/books/all")
+    @ResponseBody
+    public List<Book> getAllBooks() {
+        return (List<Book>) bookRepository.findAll();
     }
 
     /**
-     * GET /books/all
+     * GET /books/{id}
      * Returns a JSON Book object based on the ID.
-     *
-     * Example curl command for Windows:
-     * -------------------------------------------
-     * curl.exe -i -X GET -H "Accept: application/json" http://localhost:8080/books/all
-     * -------------------------------------------
-     *
-     * Expected JSON response:
-     * -------------------------------------------
-     * [{"id":1,"bookTitle":"The Road","bookISBN":"XXXXX","bookPicture":null,"bookDescription":"This is a very sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":10},{"id":2,"bookTitle":"No Country For Old Men","bookISBN":"YYYYY","bookPicture":null,"bookDescription":"This is a scary and kind of sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":10}]
-     * -------------------------------------------
+     */
+    @GetMapping("/books/{id}")
+    @ResponseBody
+    public Book getBook(@PathVariable Integer id) {
+        return bookRepository.findById(id).orElse(null);
+    }
+
+    @GetMapping("/uploads/{filename}")
+    public ResponseEntity<Resource> getUpload(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get("uploads/").resolve(filename);
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok().body(resource);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * GET /inventory/update
+     * Returns a JSON list of books based on filters.
      */
     @GetMapping("/inventory/update")
     @ResponseBody
@@ -90,23 +101,50 @@ public class BookController {
     }
 
     /**
+     * GET /addBook
+     * Returns the add book page. Only accessible to owners.
+     */
+    @GetMapping("/addBook")
+    public String addBookPage(HttpSession session, Model model) {
+        Client client = (Client) session.getAttribute("loggedInClient");
+        
+        // Check if user is logged in and is an owner
+        if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
+            // Redirect to login page if not logged in or not an owner
+            return "redirect:/login-register?error=unauthorized";
+        }
+        
+        model.addAttribute("client", client);
+        return "addBook";
+    }
+
+    /**
      * POST /books/addBook
      * Creates a new book.
-     *
-     * Example curl command for Windows:
-     * -------------------------------------------
-     * curl.exe -i -X POST -d '{\"bookTitle\": \"The Road\", \"bookISBN\": \"XXXXX\", \"bookPicture\": null, \"bookDescription\": \"This is a very sad book.\", \"bookAuthor\": \"Cormac McCarthy\", \"bookPublisher\": \"Penguin\", \"numBooksAvailableForPurchase\": 10}'
-     * -------------------------------------------
-     *
-     * Expected JSON response:
-     * -------------------------------------------
-     {"id":1,"bookTitle":"The Road","bookISBN":"XXXXX","bookPicture":null,"bookDescription":"This is a very sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":10}
-     * -------------------------------------------
      */
     @PostMapping("/books/addBook")
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+    public ResponseEntity<Book> addBook(@ModelAttribute Book book, @RequestParam(value = "file", required = false) MultipartFile file, HttpSession session) {
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        /// TODO: Add logic to ensure that only an owner client can add books
+        if (file != null && !file.isEmpty()) {
+            try {
+                // Save file to uploads/
+                String uploadDir = "uploads/";
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                String fileName = file.getOriginalFilename();
+                Path filePath = uploadPath.resolve(fileName);
+                Files.write(filePath, file.getBytes());
+                book.setBookPicture("/uploads/" + fileName);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
 
         Book savedBook = bookRepository.save(book);
         return ResponseEntity.ok(savedBook);

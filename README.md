@@ -7,3 +7,10 @@ Current State of the Project:
 - Created BookController class
 - Created BookRepository interface
 - Created book HTML page to display book
+
+
+Use the following to create an admin account:
+
+curl -X POST http://localhost:8080/client/register -H "Content-Type: application/json" -d '{"username": "admin", "password": "admin", "isOwner": true}'
+Then login with username: admin, password: admin
+
