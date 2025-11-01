@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Book</title>
+    <link rel="stylesheet" href="/css/editBook.css">
 </head>
 
 <header class="top-bar">
@@ -14,7 +15,7 @@
     </div>
     <div class="user-info-group">
         <div class="logged-in-as">
-            Logged in as: <span id="usernameDisplay">Guest User</span>
+            Logged in as: <span id="usernameDisplay" th:text="${username} ?: 'Guest User'">Guest User</span>
         </div>
         <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
             Login / Register
@@ -27,6 +28,7 @@
 <body>
 <main class="edit-book-container">
     <h2>Edit Book Details</h2>
+    <input type="hidden" id="bookId" name="id" th:value="${book.id}">
 
     <form id="editBookForm">
         <div class="form-group">
@@ -36,17 +38,17 @@
 
         <div class="form-group">
             <label for="title">Title:</label>
-            <input type="text" id="title" name="bookTitle" th:value="${book.bookISBN}">
+            <input type="text" id="title" name="bookTitle" th:value="${book.bookTitle}">
         </div>
 
         <div class="form-group">
             <label for="author">Author:</label>
-            <input type="text" id="author" name="bookAuthor" th:value="${book.bookISBN}">
+            <input type="text" id="author" name="bookAuthor" th:value="${book.bookAuthor}">
         </div>
 
         <div class="form-group">
             <label for="publisher">Publisher:</label>
-            <input type="text" id="publisher" name="bookPublisher" th:value="${book.bookISBN}">
+            <input type="text" id="publisher" name="bookPublisher" th:value="${book.bookPublisher}">
         </div>
 
         <div class="form-group">
@@ -67,10 +69,13 @@
 
         <div class="form-buttons">
             <button type="submit" class="save-btn">Save Changes</button>
-            <button type="button" class="cancel-btn" onclick="window.location.href='/browse'">Cancel</button>
+            <button type="button" class="cancel-btn" onclick="window.location.href='/inventory'">Cancel</button>
         </div>
     </form>
 </main>
+
+<script src="/js/editBook.jsx"></script>
+
 </body>
 
 </html>

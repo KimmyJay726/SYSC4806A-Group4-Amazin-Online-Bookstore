@@ -1,33 +1,38 @@
-$(document).ready(function() {
-    // Prefill form from sessionStorage
-    var book = JSON.parse(sessionStorage.getItem("editBookData"));
-    if (book) {
-        $('#bookId').val(book.id);
-        $('#bookTitle').val(book.bookTitle);
-        $('#bookAuthor').val(book.bookAuthor);
-        $('#bookISBN').val(book.bookISBN);
-        $('#bookDescription').val(book.bookDescription);
-        $('#bookPublisher').val(book.bookPublisher);
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("editBookForm");
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    // Handle form submission via AJAX
-    $('#editBookForm').submit(function(e) {
-        e.preventDefault();
+        // Get book ID from the input field
+        const id = document.getElementById("bookId").value;
+        if (!id) {
+            alert("Please enter a Book ID.");
+            return;
+        }
 
-        var bookId = $('#bookId').val();
-        var bookData = {
-            bookTitle: $('#bookTitle').val(),
-            bookAuthor: $('#bookAuthor').val(),
-            bookISBN: $('#bookISBN').val(),
-            bookDescription: $('#bookDescription').val(),
-            bookPublisher: $('#bookPublisher').val()
+        const bookData = {
+            bookISBN: document.getElementById("isbn").value,
+            bookTitle: document.getElementById("title").value,
+            bookAuthor: document.getElementById("author").value,
+            bookPublisher: document.getElementById("publisher").value,
+            bookDescription: document.getElementById("description").value,
+            bookPicture: document.getElementById("bookPicture").value
         };
 
-        $.ajax({
-            url: '/books/' + bookId + '/editBook',
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(bookData)
-        });
+        console.log("Updating book:", id, bookData);
+
+        fetch(`/books/${id}/editBook`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(bookData)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to update book");
+                return response.json();
+            })
+            .then(() => window.location.href = "/inventory")
+            .catch(err => console.error("Error updating book:", err));
     });
 });
