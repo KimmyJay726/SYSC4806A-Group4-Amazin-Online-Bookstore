@@ -15,4 +15,9 @@ public class HomepageController {
     public String signOn() {
         return "login-register";  // Find the html template at src/main/resources/templates/login-register.html
     }
+
+    @GetMapping("/inventory/edit")
+    public String editBookDetails() {
+        return "editBook";
+    }
 }
