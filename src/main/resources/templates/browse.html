@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Browse Catalog</title>
     <link rel="stylesheet" href="/css/browse.css">
-    <script src="/js/browse.jsx"></script>
-    <script src="/js/login-register.js"></script>
 </head>
 <body>
 
@@ -18,7 +16,7 @@
     </div>
     <div class="user-info-group">
         <div class="logged-in-as">
-            Logged in as: <span id="usernameDisplay">Guest User</span>
+            Logged in as: <span id="usernameDisplay" th:text="${username}">Guest User</span>
         </div>
         <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
             Login / Register
@@ -54,7 +52,19 @@
         <input type="text" id="publisher" placeholder="Enter Publisher">
     </div>
     <button type="button" class="submit-btn" id="submit-btn">Search</button>
+
+    <!-- Edit Book Button only if isOwner is true -->
+    <div th:if="${client != null and client.isOwner}" style="margin-top: 20px;">
+        <h4>Admin Edit Book</h4>
+        <div class="search-form">
+            <label for="editBookId">Book ID:</label>
+            <input type="number" id="editBookId" placeholder="Enter Book ID">
+        </div>
+        <button type="button" id="editBookBtn">Edit Book</button>
+    </div>
 </div>
+
+<hr>
 
 <!--Show list of books-->
 <div th:if="${books.size() > 0}">
@@ -89,6 +99,9 @@
 <div th:if="${books.size() == 0}">
     <p>No books available in inventory.</p>
 </div>
+
+<script src="/js/browse.jsx"></script>
+<script src="/js/login-register.js"></script>
 
 </body>
 </html>

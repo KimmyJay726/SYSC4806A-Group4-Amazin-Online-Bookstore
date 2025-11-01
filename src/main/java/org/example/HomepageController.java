@@ -1,18 +1,25 @@
 package org.example;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HomepageController {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/")
     public String homepage() {
@@ -30,6 +37,7 @@ public class HomepageController {
             @RequestParam(required = false) String author,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String publisher,
+            HttpSession session,
             Model model) {
 
         List<Book> books;
@@ -53,11 +61,27 @@ public class HomepageController {
         }
 
         model.addAttribute("books", books);
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client != null) {
+            model.addAttribute("client", client);
+            model.addAttribute("username", client.getUsername());
+        }
+        else {
+            model.addAttribute("username", "Guest User");
+        }
+
         return "browse";
     }
 
     @GetMapping("/inventory/edit")
-    public String editBook(){
-        return "editBook";
+    public String editBook(@RequestParam Integer id, Model model) {
+        Optional<Book> bookOpt = bookRepository.findById(id);
+        if (bookOpt.isPresent()) {
+            model.addAttribute("book", bookOpt.get());
+            return "editBook";
+        } else {
+            model.addAttribute("error", "Book not found");
+            return "browse";
+        }
     }
 }
