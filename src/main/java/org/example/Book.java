@@ -19,7 +19,9 @@ public class Book {
 
     private String bookTitle;
     private String bookISBN;
-    private File bookPicture;
+    //Changed bookPicture to String as html takes the string source of the image
+    private String bookPicture;
+    //private File bookPicture;
     private String bookDescription;
     private String bookAuthor;
     private String bookPublisher;
@@ -41,7 +43,7 @@ public class Book {
      * @param publisher the publisher of the book
      * @param numBooks the number of copies of the book available for purchase
      */
-    public Book(String title, String ISBN, File picture, String description, String author, String publisher, Integer numBooks) {
+    public Book(String title, String ISBN, String picture, String description, String author, String publisher, Integer numBooks) {
         bookTitle = title;
         bookISBN = ISBN;
         bookPicture = picture;
@@ -66,8 +68,8 @@ public class Book {
      */
     public String getBookISBN() { return this.bookISBN; }
 
-
-    public File getBookPicture() { return this.bookPicture; }
+    public String getBookPicture() { return this.bookPicture; }
+    //public File getBookPicture() { return this.bookPicture; }
     /**
      * @return the description assigned to a book
      */
@@ -108,9 +110,17 @@ public class Book {
 
     /**
      * Set a book's picture
+     * @param bookPicture the picture assigned to a book
+     */
+    public void setBookPicture(String bookPicture) {
+        this.bookPicture = bookPicture;
+    }
+
+    /**
+     * Set a book's picture
      * @param picture the picture assigned to a book
      */
-    public void setBookPicture(File picture) { this.bookPicture = picture; }
+    //public void setBookPicture(File picture) { this.bookPicture = picture; }
 
     /**
      * Set a book's descriptions

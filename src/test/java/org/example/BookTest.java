@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 
 public class BookTest {
 
-    private File picture1;
-    private File picture2;
+    private String picture1;
+    private String picture2;
     private Book book1;
 
     @BeforeEach
     public void setUp(){
-        picture1 = new File("pictures/The-road.jpg");
-        picture2 = new File("pictures/The-road-alternate.jpg");
+        picture1 = "pictures/The-road.jpg";
+        picture2 = "pictures/The-road-alternate.jpg";
 
         book1 = new Book(
                 "The Road",

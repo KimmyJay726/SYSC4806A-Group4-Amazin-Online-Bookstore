@@ -75,7 +75,7 @@ public class ClientTest {
         Assertions.assertEquals(0, client.getShoppingCart().size());
 
         // Create a book
-        File picture1 = new File("pictures/The-road.jpg");
+        String picture1 = "pictures/The-road.jpg";
         Book book1 = new Book(
                 "The Road",
                 "0-307-26543-9",
@@ -95,7 +95,7 @@ public class ClientTest {
     @Test
     void testRemoveFromShoppingCart(){
         // Create a book
-        File picture1 = new File("pictures/The-road.jpg");
+        String picture1 = "pictures/The-road.jpg";
         Book book1 = new Book(
                 "The Road",
                 "0-307-26543-9",
@@ -122,7 +122,7 @@ public class ClientTest {
         Assertions.assertEquals(0, client.getPurchasedBooks().size());
 
         // Create a book
-        File picture1 = new File("pictures/The-road.jpg");
+        String picture1 = "pictures/The-road.jpg";
         Book book1 = new Book(
                 "The Road",
                 "0-307-26543-9",
