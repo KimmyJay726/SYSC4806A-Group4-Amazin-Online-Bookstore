@@ -1,7 +1,5 @@
 package org.example;
 
-import java.io.File;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +12,8 @@ public class BookTest {
 
     @BeforeEach
     public void setUp(){
-        picture1 = "pictures/The-road.jpg";
-        picture2 = "pictures/The-road-alternate.jpg";
+        picture1 = "static/pictures/The-road.jpg";
+        picture2 = "static/pictures/The-road-alternate.jpg";
 
         book1 = new Book(
                 "The Road",

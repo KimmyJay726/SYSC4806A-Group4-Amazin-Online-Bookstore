@@ -33,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${book.id}</td>
                             <td>${book.bookISBN}</td>
                             <td>${book.bookTitle}</td>
+                            <td>
+                                ${book.bookPicture
+                                        ? `<img src="${book.bookPicture}" width="80" height="100">`
+                                        : "No Image"}
+                            </td>
                             <td>${book.bookAuthor}</td>
                             <td>${book.bookPublisher}</td>
                             <td>${book.bookDescription}</td>
