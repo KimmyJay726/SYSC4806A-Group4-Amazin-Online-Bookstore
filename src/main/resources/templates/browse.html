@@ -52,16 +52,16 @@
         <input type="text" id="publisher" placeholder="Enter Publisher">
     </div>
     <button type="button" class="submit-btn" id="submit-btn">Search</button>
+</div>
 
-    <!-- Edit Book Button only if isOwner is true -->
-    <div th:if="${client != null and client.isOwner}" style="margin-top: 20px;">
-        <h4>Admin Edit Book</h4>
-        <div class="search-form">
-            <label for="editBookId">Book ID:</label>
-            <input type="number" id="editBookId" placeholder="Enter Book ID">
-        </div>
-        <button type="button" id="editBookBtn">Edit Book</button>
+<!-- Edit Book Button only if isOwner is true -->
+<div th:if="${client != null and client.isOwner}" class="admin-container">
+    <h4>Admin Edit Book</h4>
+    <div class="search-form">
+        <label for="editBookId">Book ID:</label>
+        <input type="text" id="editBookId" placeholder="Enter Book ID">
     </div>
+    <button type="button" id="editBookBtn">Edit Book</button>
 </div>
 
 <hr>
