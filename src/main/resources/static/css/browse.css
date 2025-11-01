@@ -1,0 +1,105 @@
+/* General Resets */
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #f4f4f9;
+}
+
+/* Top Bar Component */
+.top-bar {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon Location Component */
+.site-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icon Component - CORRECTION HERE */
+.site-icon {
+    font-size: 1.5em;
+    color: #FFEB3B; /* This color was missing or incorrect previously */
+}
+
+/* Site Name Component in Top Bar*/
+.site-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+/* User Info Component */
+.user-info-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Displaying who is logged in Component in Top Bar*/
+.logged-in-as {
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+/* Login Button Component in Top Bar*/
+.login-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+/*Page Body*/
+
+/*Search component*/
+.search-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.search-form input[type="text"] {
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+/*Table component*/
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}

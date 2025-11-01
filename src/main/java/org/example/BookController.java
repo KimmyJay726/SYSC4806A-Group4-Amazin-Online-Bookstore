@@ -58,10 +58,35 @@ public class BookController {
      * [{"id":1,"bookTitle":"The Road","bookISBN":"XXXXX","bookPicture":null,"bookDescription":"This is a very sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":10},{"id":2,"bookTitle":"No Country For Old Men","bookISBN":"YYYYY","bookPicture":null,"bookDescription":"This is a scary and kind of sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":10}]
      * -------------------------------------------
      */
-    @GetMapping("/books/all")
-    public ResponseEntity<List<Book>> getAllBooks() {
-        List<Book> books = (List<Book>) bookRepository.findAll();
-        return ResponseEntity.ok(books);
+    @GetMapping("/inventory/update")
+    @ResponseBody
+    public List<Book> searchBooks(@RequestParam(required = false) String isbn,
+                                  @RequestParam(required = false) String title,
+                                  @RequestParam(required = false) String author,
+                                  @RequestParam(required = false) String publisher) {
+
+        List<Book> books = null;
+
+        //Go through the filters and return the books.
+        //TODO make it cross-check each filter.
+        if (isbn != null && !isbn.isEmpty()) {
+            books = bookRepository.findByBookISBN(isbn);
+        }
+        else if (title != null && !title.isEmpty()) {
+            books = bookRepository.findByBookTitle(title);
+        }
+        else if (author != null && !author.isEmpty()) {
+            books = bookRepository.findByBookAuthor(author);
+        }
+        else if (publisher != null && !publisher.isEmpty()) {
+            books = bookRepository.findByBookPublisher(publisher);
+        }
+        else {
+            books = (List<Book>) bookRepository.findAll();
+        }
+
+        // Return all if no filter given
+        return books;
     }
 
     /**

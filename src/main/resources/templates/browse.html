@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Catalog</title>
+    <link rel="stylesheet" href="/css/browse.css">
+    <script src="/js/browse.jsx"></script>
+    <script src="/js/login-register.js"></script>
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            Amazin Online Bookstore
+        </div>
+    </div>
+    <div class="user-info-group">
+        <div class="logged-in-as">
+            Logged in as: <span id="usernameDisplay">Guest User</span>
+        </div>
+        <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
+            Login / Register
+        </button>
+    </div>
+</header>
+
+<hr>
+
+<!--Search bar-->
+<div action="/inventory/update" method="get" class="search-container">
+    <!--ISBN bar-->
+    <div class="search-form">
+        <label>ISBN</label>
+        <input type="text" id="isbn" placeholder="Enter ISBN">
+    </div>
+
+    <!--Title bar-->
+    <div class="search-form">
+        <label>Title</label>
+        <input type="text" id="title" placeholder="Enter Title">
+    </div>
+
+    <!--Author bar-->
+    <div class="search-form">
+        <label>Author</label>
+        <input type="text" id="author" placeholder="Enter Author">
+    </div>
+
+    <!--Publisher bar-->
+    <div class="search-form">
+        <label>Publisher</label>
+        <input type="text" id="publisher" placeholder="Enter Publisher">
+    </div>
+    <button type="button" class="submit-btn" id="submit-btn">Search</button>
+</div>
+
+<!--Show list of books-->
+<div th:if="${books.size() > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Picture</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody id="results">
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.bookISBN}"></td>
+            <td th:text="${book.bookTitle}"></td>
+            <td>
+                <img th:src="${book.bookPicture}" width="80" height="100">
+            </td>
+            <td th:text="${book.bookAuthor}"></td>
+            <td th:text="${book.bookPublisher}"></td>
+            <td th:text="${book.bookDescription}"></td>
+        </tbody>
+    </table>
+</div>
+
+<!--No books found-->
+<div th:if="${books.size() == 0}">
+    <p>No books available in inventory.</p>
+</div>
+
+</body>
+</html>
