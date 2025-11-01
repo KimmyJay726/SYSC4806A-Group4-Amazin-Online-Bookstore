@@ -55,4 +55,9 @@ public class HomepageController {
         model.addAttribute("books", books);
         return "browse";
     }
+
+    @GetMapping("/inventory/edit")
+    public String editBook(){
+        return "editBook";
+    }
 }
