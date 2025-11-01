@@ -8,6 +8,23 @@
 </head>
 <body>
 
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            Amazin Online Bookstore
+        </div>
+    </div>
+    <div class="user-info-group">
+        <div class="logged-in-as">
+            Logged in as: <span id="usernameDisplay">Guest User</span>
+        </div>
+        <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
+            Login / Register
+        </button>
+    </div>
+</header>
+
 <!--Search bar-->
 <div action="/inventory/update" method="get" class="search-container">
     <!--ISBN bar-->
@@ -44,6 +61,7 @@
             <th>ID</th>
             <th>ISBN</th>
             <th>Title</th>
+            <th>Picture</th>
             <th>Author</th>
             <th>Publisher</th>
             <th>Description</th>
@@ -54,6 +72,9 @@
             <td th:text="${book.id}"></td>
             <td th:text="${book.bookISBN}"></td>
             <td th:text="${book.bookTitle}"></td>
+            <td>
+                <img src>
+            </td>
             <td th:text="${book.bookAuthor}"></td>
             <td th:text="${book.bookPublisher}"></td>
             <td th:text="${book.bookDescription}"></td>
