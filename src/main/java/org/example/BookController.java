@@ -38,7 +38,7 @@ public class BookController {
      * -------------------------------------------
      */
     @GetMapping("/books/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<Book> getBook(@PathVariable(value = "id") Long id) {
         return bookRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -132,12 +132,15 @@ public class BookController {
      *
      */
     @PutMapping("/books/{id}/editBook")
-    public ResponseEntity<Book> editBook(@PathVariable(value = "id") Integer id, @RequestBody Book book) {
+    public ResponseEntity<Book> editBook(@PathVariable(value = "id") Long id, @RequestBody Book book) {
 
         /// TODO: Add logic to ensure that only an owner client can edit books
 
         Optional<Book> editBook = bookRepository.findById(id);
 
+        if(editBook.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
         editBook.ifPresent(value -> value.setBookTitle(book.getBookTitle()));
         editBook.ifPresent(value -> value.setBookISBN(book.getBookISBN()));
         editBook.ifPresent(value -> value.setBookDescription(book.getBookDescription()));
@@ -165,7 +168,7 @@ public class BookController {
      * -------------------------------------------
      */
     @GetMapping("/books/{id}/purchaseBook")
-    public ResponseEntity<Book> purchaseBook(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<Book> purchaseBook(@PathVariable(value = "id") Long id) {
 
         Optional<Book> purchaseBook = bookRepository.findById(id);
 
