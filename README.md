@@ -53,14 +53,6 @@ This schema is derived directly from the UML diagram.
 | **bookDescription** | `Text` | Detailed summary or description of the book. |
 | **bookPicture** | `String` | URL or path to the external image file. |
 
-### Table: `Inventory` (Derived from Inventory Class)
-
-| Field Name | Data Type | Constraints / Description |
-| :--- | :--- | :--- |
-| **book\_id** | `Long` | **Primary Key, Foreign Key** to `Books.id`. |
-| **stockCount** | `Integer` | The current number of units available for the book. |
-| **lastUpdated** | `Timestamp` | Date and time the inventory was last changed. |
-
 ### Relationship Table: `Cart` (Handles the `shoppingCart` relationship)
 
 | Field Name | Data Type | Constraints / Description |
