@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Client {
@@ -18,7 +19,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private Boolean isOwner;
+    private Boolean isOwner = false;
     private String username;
     private String password;
 

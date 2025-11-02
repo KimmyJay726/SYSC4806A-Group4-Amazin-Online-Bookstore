@@ -70,7 +70,7 @@ $(document).ready(function () {
                     url: "/client/register",
                     method: "POST",
                     contentType: "application/json",
-                    data: JSON.stringify({ username, password }),
+                    data: JSON.stringify({ username, password, isOwner: false}),
                     success: function () {
                         showMessage($signupMessage, "Account created! You can now log in.", true);
                         setTimeout(() => $("#showLogin").click(), 1500);

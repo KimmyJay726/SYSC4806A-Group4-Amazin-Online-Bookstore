@@ -165,26 +165,54 @@ public class BookController {
      * -------------------------------------------
      *
      * @param id the id of the book to be updated
-     * @param book a temporary book object whose attributes are used to update the book
      * @return
      *
      */
-    @PutMapping("/books/{id}/editBook")
-    public ResponseEntity<Book> editBook(@PathVariable(value = "id") Integer id, @RequestBody Book book) {
+    @PostMapping(value = "/books/{id}/editBook")
+    public ResponseEntity<Book> editBook(
+            @PathVariable Long id,
+            @ModelAttribute BookForm form,
+            HttpSession session) {
 
-        /// TODO: Add logic to ensure that only an owner client can edit books
+        // Optional: check if client is owner
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        Optional<Book> editBook = bookRepository.findById(id);
+        Optional<Book> editBookOpt = bookRepository.findById(id);
+        if (editBookOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
 
-        editBook.ifPresent(value -> value.setBookTitle(book.getBookTitle()));
-        editBook.ifPresent(value -> value.setBookISBN(book.getBookISBN()));
-        editBook.ifPresent(value -> value.setBookDescription(book.getBookDescription()));
-        editBook.ifPresent(value -> value.setBookAuthor(book.getBookAuthor()));
-        editBook.ifPresent(value -> value.setBookPublisher(book.getBookPublisher()));
+        Book editBook = editBookOpt.get();
+        editBook.setBookISBN(form.getBookISBN());
+        editBook.setBookTitle(form.getBookTitle());
+        editBook.setBookAuthor(form.getBookAuthor());
+        editBook.setBookPublisher(form.getBookPublisher());
+        editBook.setBookDescription(form.getBookDescription());
 
-        bookRepository.save(editBook.get());
+        MultipartFile file = form.getBookPicture(); // same as 'file' in your example
+        if (file != null && !file.isEmpty()) {
+            try {
+                String uploadDir = "uploads/";
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
 
-        return ResponseEntity.ok(editBook.get());
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                Path filePath = uploadPath.resolve(fileName);
+                Files.write(filePath, file.getBytes());
+                editBook.setBookPicture("/uploads/" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
+        bookRepository.save(editBook);
+        return ResponseEntity.ok(editBook);
     }
 
     /**

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Book</title>
+    <link rel="stylesheet" href="/css/editBook.css">
+</head>
+
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            Amazin Online Bookstore
+        </div>
+    </div>
+    <div class="user-info-group">
+        <div class="logged-in-as">
+            Logged in as: <span id="usernameDisplay" th:text="${username} ?: 'Guest User'">Guest User</span>
+        </div>
+        <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
+            Login / Register
+        </button>
+    </div>
+</header>
+
+<hr>
+
+<body>
+<main class="edit-book-container">
+    <h2>Edit Book Details</h2>
+    <input type="hidden" id="bookId" name="id" th:value="${book.id}">
+
+    <form id="editBookForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="isbn">ISBN:</label>
+            <input type="text" id="isbn" name="bookISBN" th:value="${book.bookISBN}">
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="bookTitle" th:value="${book.bookTitle}">
+        </div>
+
+        <div class="form-group">
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="bookAuthor" th:value="${book.bookAuthor}">
+        </div>
+
+        <div class="form-group">
+            <label for="publisher">Publisher:</label>
+            <input type="text" id="publisher" name="bookPublisher" th:value="${book.bookPublisher}">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="bookDescription" rows="3" th:text="${book.bookDescription}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="bookPicture">Book Picture:</label>
+            <input type="file" id="bookPicture" name="bookPicture">
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="save-btn">Save Changes</button>
+            <button type="button" class="cancel-btn" onclick="window.location.href='/inventory'">Cancel</button>
+        </div>
+    </form>
+</main>
+
+
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Main Js for the editBook functionality-->
+<script src="/js/editBook.js"></script>
+
+<!-- JS for the login -->
+<script src="/js/index.js"></script>
+<script src="/js/login-register.js"></script>
+
+</body>
+
+</html>
