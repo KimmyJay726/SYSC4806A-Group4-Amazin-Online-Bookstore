@@ -8,12 +8,20 @@ package org.example;
 
 import org.hibernate.boot.model.internal.CreateKeySecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,29 +135,48 @@ public class BookController {
      * -------------------------------------------
      *
      * @param id the id of the book to be updated
-     * @param book a temporary book object whose attributes are used to update the book
      * @return
      *
      */
-    @PutMapping("/books/{id}/editBook")
-    public ResponseEntity<Book> editBook(@PathVariable(value = "id") Long id, @RequestBody Book book) {
+    @PutMapping(value="/books/{id}/editBook", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Book> editBook(@PathVariable(value = "id") Long id,
+                                         @RequestParam("bookISBN") String bookISBN,
+                                         @RequestParam("bookTitle") String bookTitle,
+                                         @RequestParam("bookAuthor") String bookAuthor,
+                                         @RequestParam("bookPublisher") String bookPublisher,
+                                         @RequestParam("bookDescription") String bookDescription,
+                                         @RequestParam(value = "bookPicture", required = false) MultipartFile bookPicture) {
 
         /// TODO: Add logic to ensure that only an owner client can edit books
 
-        Optional<Book> editBook = bookRepository.findById(id);
+        Optional<Book> editBookOpt = bookRepository.findById(id);
 
-        if(editBook.isEmpty()){
+        if(editBookOpt.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        editBook.ifPresent(value -> value.setBookTitle(book.getBookTitle()));
-        editBook.ifPresent(value -> value.setBookISBN(book.getBookISBN()));
-        editBook.ifPresent(value -> value.setBookDescription(book.getBookDescription()));
-        editBook.ifPresent(value -> value.setBookAuthor(book.getBookAuthor()));
-        editBook.ifPresent(value -> value.setBookPublisher(book.getBookPublisher()));
+        Book editBook = editBookOpt.get();
+        editBook.setBookTitle(bookTitle);
+        editBook.setBookISBN(bookISBN);
+        editBook.setBookDescription(bookDescription);
+        editBook.setBookAuthor(bookAuthor);
+        editBook.setBookPublisher(bookPublisher);
 
-        bookRepository.save(editBook.get());
+        if (bookPicture != null && !bookPicture.isEmpty()) {
+            try {
+                String fileName = System.currentTimeMillis() + "_" + bookPicture.getOriginalFilename();
+                Path uploadPath = Paths.get("src/main/resources/static/pictures/");
+                Files.createDirectories(uploadPath);
+                Files.copy(bookPicture.getInputStream(), uploadPath.resolve(fileName),
+                        StandardCopyOption.REPLACE_EXISTING);
 
-        return ResponseEntity.ok(editBook.get());
+                editBook.setBookPicture("/pictures/" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+        bookRepository.save(editBook);
+        return ResponseEntity.ok(editBook);
     }
 
     /**

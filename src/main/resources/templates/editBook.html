@@ -30,7 +30,7 @@
     <h2>Edit Book Details</h2>
     <input type="hidden" id="bookId" name="id" th:value="${book.id}">
 
-    <form id="editBookForm">
+    <form id="editBookForm" enctype="multipart/form-data">
         <div class="form-group">
             <label for="isbn">ISBN:</label>
             <input type="text" id="isbn" name="bookISBN" th:value="${book.bookISBN}">
@@ -59,12 +59,6 @@
         <div class="form-group">
             <label for="bookPicture">Book Picture:</label>
             <input type="file" id="bookPicture" name="bookPicture">
-            <div class="preview">
-                <img th:if="${book.bookPicture != null}"
-                     th:src="@{/pictures/{file}(file=${book.bookPicture})}"
-                     alt="Current Book Image"
-                     width="120">
-            </div>
         </div>
 
         <div class="form-buttons">
@@ -74,7 +68,7 @@
     </form>
 </main>
 
-<script src="/js/editBook.jsx"></script>
+<script src="/js/editBook.js"></script>
 
 </body>
 

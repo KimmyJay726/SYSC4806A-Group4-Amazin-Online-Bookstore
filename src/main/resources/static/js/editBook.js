@@ -10,23 +10,21 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const bookData = {
-            bookISBN: document.getElementById("isbn").value,
-            bookTitle: document.getElementById("title").value,
-            bookAuthor: document.getElementById("author").value,
-            bookPublisher: document.getElementById("publisher").value,
-            bookDescription: document.getElementById("description").value,
-            bookPicture: document.getElementById("bookPicture").value
-        };
+        const formData = new FormData();
+        formData.append("bookISBN", document.getElementById("isbn").value);
+        formData.append("bookTitle", document.getElementById("title").value);
+        formData.append("bookAuthor", document.getElementById("author").value);
+        formData.append("bookPublisher", document.getElementById("publisher").value);
+        formData.append("bookDescription", document.getElementById("description").value);
 
-        console.log("Updating book:", id, bookData);
+        const pictureFile = document.getElementById("bookPicture").files[0];
+        if (pictureFile) formData.append("bookPicture", pictureFile);
+
+        console.log("Submitting form data for book:", id);
 
         fetch(`/books/${id}/editBook`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(bookData)
+            body: formData
         })
             .then(response => {
                 if (!response.ok) throw new Error("Failed to update book");
