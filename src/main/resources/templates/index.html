@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,10 +31,10 @@
 
     <div class="feature-buttons">
 
-        <a href="/search" class="feature-button button-purchase">
-            **START PURCHASING** (Temp)
-            <span class="button-note">(Route to Search Page)</span>
-        </a>
+         <a th:if="${client != null and client.isOwner == true}" href="/addBook" class="feature-button button-purchase">
+             **ADD BOOK**
+             <span class="button-note">(Add a new book to inventory)</span>
+         </a>
 
         <a href="/inventory" class="feature-button button-browse">
             **BROWSE CATALOG** (Temp)
