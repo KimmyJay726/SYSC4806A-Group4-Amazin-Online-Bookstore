@@ -1,3 +1,5 @@
+package org.example;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public class BookForm {

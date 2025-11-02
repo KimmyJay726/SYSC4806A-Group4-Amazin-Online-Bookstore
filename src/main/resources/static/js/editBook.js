@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Submitting form data for book:", id);
 
         fetch(`/books/${id}/editBook`, {
-            method: "PUT",
+            method: "POST",
             body: formData
         })
             .then(response => {

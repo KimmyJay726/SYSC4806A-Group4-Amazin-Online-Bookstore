@@ -49,6 +49,7 @@ public class HomepageController {
         Client client = (Client) session.getAttribute("loggedInClient");
         if (client != null) {
             model.addAttribute("client", client);
+            model.addAttribute("username", client.getUsername());
         }
 
         List<Book> books;
@@ -72,14 +73,6 @@ public class HomepageController {
         }
 
         model.addAttribute("books", books);
-        Client client = (Client) session.getAttribute("loggedInClient");
-        if (client != null) {
-            model.addAttribute("client", client);
-            model.addAttribute("username", client.getUsername());
-        }
-        else {
-            model.addAttribute("username", "Guest User");
-        }
 
         return "browse";
     }
