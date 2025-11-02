@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Browse Catalog</title>
@@ -13,8 +13,13 @@
     <div class="site-identity">
         <div class="site-icon"> 📚 </div>
         <div class="site-name">
-            Amazin Online Bookstore
+            <a href="/" style="text-decoration: none; color: inherit;">Amazin Online Bookstore</a>
         </div>
+    </div>
+    <div class="navbar-actions">
+        <a th:if="${client != null and client.isOwner == true}" href="/addBook" class="add-book-button">
+            Add Book
+        </a>
     </div>
     <div class="user-info-group">
         <div class="logged-in-as">
