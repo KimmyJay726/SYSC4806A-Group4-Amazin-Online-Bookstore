@@ -73,6 +73,10 @@ This schema is derived directly from the UML diagram.
 
 ## Notes
 
+### Link to deployed site (on Azure):
+
+- https://amazin-online-bookstore-group4.azurewebsites.net/ 
+
 ### Use the following to create an admin account:
 
 curl -X POST http://localhost:8080/client/register -H "Content-Type: application/json" -d '{"username": "admin", "password": "admin", "isOwner": true}' Then login with username: admin, password: admin
