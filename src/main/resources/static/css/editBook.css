@@ -96,13 +96,14 @@ main h2 {
     margin-bottom: 5px;
 }
 
-.form-group input[type="text"],
-.form-group input[type="file"],
+.form-group input,
 .form-group textarea {
+    width: 100%;
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+    box-sizing: border-box;
 }
 
 .form-group textarea {

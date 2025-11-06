@@ -54,7 +54,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/great-gatsby.jpg", 
                 "A classic novel that I have never read but people like to mention",
                 "F. Scott Fitzgerald", 
-                "Scribner", 
+                "Scribner",
+                13.99,
                 25
             ),
             new Book(
@@ -63,7 +64,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/mockingbird.jpg", 
                 "A classic book about the evasive nature of mockingbirds",
                 "Harper Lee", 
-                "J.B. Lippincott", 
+                "J.B. Lippincott",
+                25.88,
                 30
             ),
             new Book(
@@ -72,7 +74,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/1984.jpg", 
                 "George Orwell's must read classic novel about a dystopian future",
                 "George Orwell", 
-                "Secker & Warburg", 
+                "Secker & Warburg",
+                16.50,
                 40
             ),
             new Book(
@@ -81,7 +84,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/pride-prejudice.jpg", 
                 "Women love this book",
                 "Jane Austen", 
-                "T. Egerton", 
+                "T. Egerton",
+                40.00,
                 35
             ),
             new Book(
@@ -90,7 +94,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/catcher-rye.jpg", 
                 "J.D. Salinger's coming-of-age story following Holden Caulfield in New York City",
                 "J.D. Salinger", 
-                "Little, Brown and Company", 
+                "Little, Brown and Company",
+                23.10,
                 20
             ),
             new Book(
@@ -99,7 +104,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/lotr.jpg", 
                 "Tolkien's trilogy about the quest to destroy the One Ring",
                 "J.R.R. Tolkien", 
-                "George Allen & Unwin", 
+                "George Allen & Unwin",
+                27.79,
                 15
             ),
             new Book(
@@ -108,7 +114,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/harry-potter.jpg", 
                 "The first book in the magical series about the boy who lived",
                 "J.K. Rowling", 
-                "Bloomsbury", 
+                "Bloomsbury",
+                31.99,
                 50
             ),
             new Book(
@@ -117,7 +124,8 @@ public class DataSeeder implements CommandLineRunner {
                 "/pictures/The-road.jpg", 
                 "A post-apocalyptic tale of a father and son's journey through a devastated America",
                 "Cormac McCarthy", 
-                "Alfred A. Knopf", 
+                "Alfred A. Knopf",
+                18.99,
                 18
             )
         );

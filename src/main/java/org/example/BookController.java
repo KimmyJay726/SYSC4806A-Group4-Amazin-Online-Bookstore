@@ -190,6 +190,8 @@ public class BookController {
         editBook.setBookTitle(form.getBookTitle());
         editBook.setBookAuthor(form.getBookAuthor());
         editBook.setBookPublisher(form.getBookPublisher());
+        editBook.setBookPrice(form.getBookPrice());
+        editBook.setNumBooksAvailableForPurchase(form.getNumBooksAvailableForPurchase());
         editBook.setBookDescription(form.getBookDescription());
 
         MultipartFile file = form.getBookPicture(); // same as 'file' in your example

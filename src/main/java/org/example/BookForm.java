@@ -7,6 +7,8 @@ public class BookForm {
     private String bookTitle;
     private String bookAuthor;
     private String bookPublisher;
+    private double bookPrice;
+    private int numBooksAvailableForPurchase;
     private String bookDescription;
     private MultipartFile bookPicture; // This is only in the form, not in the DB entity
 
@@ -22,6 +24,12 @@ public class BookForm {
 
     public String getBookPublisher() { return bookPublisher; }
     public void setBookPublisher(String bookPublisher) { this.bookPublisher = bookPublisher; }
+
+    public double getBookPrice() { return bookPrice; }
+    public void setBookPrice(double bookPrice) { this.bookPrice = bookPrice; }
+
+    public int getNumBooksAvailableForPurchase() { return numBooksAvailableForPurchase; }
+    public void setNumBooksAvailableForPurchase(int numBooksAvailableForPurchase) { this.numBooksAvailableForPurchase = numBooksAvailableForPurchase; }
 
     public String getBookDescription() { return bookDescription; }
     public void setBookDescription(String bookDescription) { this.bookDescription = bookDescription; }

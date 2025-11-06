@@ -25,6 +25,7 @@ public class Book {
     private String bookDescription;
     private String bookAuthor;
     private String bookPublisher;
+    private double bookPrice;
 
     private Integer numBooksAvailableForPurchase;
 
@@ -41,15 +42,17 @@ public class Book {
      * @param description the description of the book on the website
      * @param author the author of the book
      * @param publisher the publisher of the book
+     * @param bookPrice the price of the book
      * @param numBooks the number of copies of the book available for purchase
      */
-    public Book(String title, String ISBN, String picture, String description, String author, String publisher, Integer numBooks) {
+    public Book(String title, String ISBN, String picture, String description, String author, String publisher, double bookPrice, Integer numBooks) {
         bookTitle = title;
         bookISBN = ISBN;
         bookPicture = picture;
         bookDescription = description;
         bookAuthor = author;
         bookPublisher = publisher;
+        this.bookPrice = bookPrice;
         numBooksAvailableForPurchase = numBooks;
     }
 
@@ -84,6 +87,11 @@ public class Book {
      * @return the publisher of a book
      */
     public String getBookPublisher() { return this.bookPublisher; }
+
+    /**
+     * @return the price of a book
+     */
+    public double getBookPrice() { return this.bookPrice; }
 
     /**
      * @return the number of copies of the book available for purchase
@@ -139,6 +147,12 @@ public class Book {
      * @param publisher the publisher of a book
      */
     public void setBookPublisher(String publisher) { this.bookPublisher = publisher; }
+
+    /**
+     * Set a book's price
+     * @param bookPrice the price of a book
+     */
+    public void setBookPrice(double bookPrice) { this.bookPrice = bookPrice; }
 
     /**
      * Set a book's number of copies available for purchase

@@ -22,6 +22,7 @@ public class BookTest {
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
                 "Alfred A. Knopf",
+                15.99,
                 10
         );
     }
@@ -57,6 +58,11 @@ public class BookTest {
     @Test
     void testGetBookPublisher() {
         Assertions.assertEquals("Alfred A. Knopf", book1.getBookPublisher());
+    }
+
+    @Test
+    void testGetBookPrice() {
+        Assertions.assertEquals(15.99, book1.getBookPrice());
     }
 
     @Test
@@ -96,6 +102,12 @@ public class BookTest {
     void testSetBookPublisher() {
         book1.setBookPublisher("Penguin Random House");
         Assertions.assertEquals("Penguin Random House", book1.getBookPublisher());
+    }
+
+    @Test
+    void testSetBookPrice() {
+        book1.setBookPrice(29.98);
+        Assertions.assertEquals(29.98, book1.getBookPrice());
     }
 
     @Test
