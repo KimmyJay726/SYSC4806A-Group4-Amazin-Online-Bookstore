@@ -41,7 +41,7 @@
             <span class="button-note">(Route to Inventory Page)</span>
         </a>
 
-        <a href="/recommendations" class="feature-button button-recs">
+        <a th:href="${client != null} ? '/recommendations' : '/login-register'" class="feature-button button-recs">
             **YOUR RECOMMENDATIONS** (Temp)
             <span class="button-note">(Route to Login page if not logged in)</span>
         </a>
