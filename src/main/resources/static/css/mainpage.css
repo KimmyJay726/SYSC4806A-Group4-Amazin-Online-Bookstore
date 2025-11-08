@@ -69,6 +69,26 @@ body {
     background-color: #0056b3;
 }
 
+/* Purchase Button in the Top Bar*/
+.purchase-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.purchase-button:hover {
+    background-color: #388E3C;
+}
+
 /* Navbar Actions */
 .navbar-actions {
     display: flex;
