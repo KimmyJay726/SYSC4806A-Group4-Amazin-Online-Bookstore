@@ -82,6 +82,8 @@
             <th>Picture</th>
             <th>Author</th>
             <th>Publisher</th>
+            <th>Price</th>
+            <th>Quantity</th>
             <th>Description</th>
         </tr>
         </thead>
@@ -95,6 +97,9 @@
             </td>
             <td th:text="${book.bookAuthor}"></td>
             <td th:text="${book.bookPublisher}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(book.bookPrice, 1, 2)}"></td>
+
+            <td th:text="${book.numBooksAvailableForPurchase}"></td>
             <td th:text="${book.bookDescription}"></td>
         </tbody>
     </table>

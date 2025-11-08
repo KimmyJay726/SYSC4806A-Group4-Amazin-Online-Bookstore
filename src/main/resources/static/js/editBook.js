@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("bookTitle", document.getElementById("title").value);
         formData.append("bookAuthor", document.getElementById("author").value);
         formData.append("bookPublisher", document.getElementById("publisher").value);
+        formData.append("bookPrice", document.getElementById("price").value);
+        formData.append("numBooksAvailableForPurchase", document.getElementById("numBooks").value);
         formData.append("bookDescription", document.getElementById("description").value);
 
         const pictureFile = document.getElementById("bookPicture").files[0];

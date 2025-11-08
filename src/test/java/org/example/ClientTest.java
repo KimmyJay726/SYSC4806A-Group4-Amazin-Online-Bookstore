@@ -81,6 +81,7 @@ public class ClientTest {
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
                 "Alfred A. Knopf",
+                23.45,
                 10
         );
 
@@ -101,6 +102,7 @@ public class ClientTest {
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
                 "Alfred A. Knopf",
+                12.32,
                 10
         );
 
@@ -128,6 +130,7 @@ public class ClientTest {
                 "The Road is a 2006 post-apocalyptic novel by American writer Cormac McCarthy. The book details the grueling journey of a father and his young son over several months across a landscape blasted by an unspecified cataclysm that has destroyed industrial civilization and nearly all life.",
                 "Cormac McCarthy",
                 "Alfred A. Knopf",
+                34.56,
                 10
         );
 

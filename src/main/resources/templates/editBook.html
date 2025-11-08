@@ -33,27 +33,37 @@
     <form id="editBookForm" enctype="multipart/form-data">
         <div class="form-group">
             <label for="isbn">ISBN:</label>
-            <input type="text" id="isbn" name="bookISBN" th:value="${book.bookISBN}">
+            <input type="text" id="isbn" name="bookISBN" th:value="${book.bookISBN}" required>
         </div>
 
         <div class="form-group">
             <label for="title">Title:</label>
-            <input type="text" id="title" name="bookTitle" th:value="${book.bookTitle}">
+            <input type="text" id="title" name="bookTitle" th:value="${book.bookTitle}" required>
         </div>
 
         <div class="form-group">
             <label for="author">Author:</label>
-            <input type="text" id="author" name="bookAuthor" th:value="${book.bookAuthor}">
+            <input type="text" id="author" name="bookAuthor" th:value="${book.bookAuthor}" required>
         </div>
 
         <div class="form-group">
             <label for="publisher">Publisher:</label>
-            <input type="text" id="publisher" name="bookPublisher" th:value="${book.bookPublisher}">
+            <input type="text" id="publisher" name="bookPublisher" th:value="${book.bookPublisher}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="bookPrice" th:value="${book.bookPrice}" required step="0.01" min="0.01">
+        </div>
+
+        <div class="form-group">
+            <label for="numBooks">Number of Copies:</label>
+            <input type="number" id="numBooks" name="numBooksAvailableForPurchase" th:value="${book.numBooksAvailableForPurchase}" required min="1">
         </div>
 
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea id="description" name="bookDescription" rows="3" th:text="${book.bookDescription}"></textarea>
+            <textarea id="description" name="bookDescription" rows="3" th:text="${book.bookDescription}" required></textarea>
         </div>
 
         <div class="form-group">

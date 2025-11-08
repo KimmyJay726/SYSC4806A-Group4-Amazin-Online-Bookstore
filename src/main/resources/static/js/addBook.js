@@ -17,9 +17,10 @@ $(document).ready(function () {
         const description = $("#bookDescription").val().trim();
         const author = $("#bookAuthor").val().trim();
         const publisher = $("#bookPublisher").val().trim();
+        const price = $("#bookPrice").val().trim();
         const numBooks = $("#numBooks").val();
 
-        if (!title || !isbn || !description || !author || !publisher || !numBooks) {
+        if (!title || !isbn || !description || !author || !publisher || !price || !numBooks) {
             showMessage($addBookMessage, "Please fill out all fields.");
             return;
         }
