@@ -59,16 +59,6 @@
     <button type="button" class="submit-btn" id="submit-btn">Search</button>
 </div>
 
-<!-- Edit Book Button only if isOwner is true -->
-<div th:if="${client != null and client.isOwner}" class="admin-container">
-    <h4>Admin Edit Book</h4>
-    <div class="search-form">
-        <label for="editBookId">Book ID:</label>
-        <input type="text" id="editBookId" placeholder="Enter Book ID">
-    </div>
-    <button type="button" id="editBookBtn">Edit Book</button>
-</div>
-
 <hr>
 
 <!--Show list of books-->
@@ -85,6 +75,7 @@
             <th>Price</th>
             <th>Quantity</th>
             <th>Description</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody id="results">
@@ -101,6 +92,15 @@
 
             <td th:text="${book.numBooksAvailableForPurchase}"></td>
             <td th:text="${book.bookDescription}"></td>
+            <td>
+                <div th:if="${client != null and not client.isOwner}">
+                    <button type="button" class="action-button" id="addToCart" onclick="alert('Add to cart')">Add</button><br>
+                    <button type="button" class="action-button" id="removeFromCart" onclick="alert('Remove from cart')">Remove</button>
+                </div>
+                <div th:if="${client != null and client.isOwner}">
+                    <button type="button" class="action-button" id="editBook" th:onclick="'editBook(' + ${book.id} + ')'">Edit</button>
+                </div>
+            </td>
         </tbody>
     </table>
 </div>

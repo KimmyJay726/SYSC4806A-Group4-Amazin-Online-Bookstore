@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const searchBtn = document.getElementById('submit-btn');
-    const editBtn = document.getElementById('editBookBtn');
 
     if (searchBtn){
         searchBtn.addEventListener('click', function () {
@@ -47,27 +46,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
         });
     }
-
-    if (editBtn) {
-        editBtn.addEventListener('click', function () {
-            const bookId = document.getElementById('editBookId').value.trim();
-            if (!bookId) {
-                alert("Please enter a Book ID.");
-                return;
-            }
-
-            fetch('/books/' + bookId)
-                .then(response => {
-                    if (!response.ok) throw new Error("Book not found");
-                    return response.json();
-                })
-                .then(book => {
-                    sessionStorage.setItem('editBookData', JSON.stringify(book));
-                    window.location.href = '/inventory/edit?id=' + bookId;
-                })
-                .catch(err => {
-                    alert(err.message);
-                });
-        });
-    }
 });
+
+function editBook(bookId) {
+    fetch('/books/' + bookId)
+         .then(response => {
+            if (!response.ok) throw new Error("Book not found");
+                return response.json();
+            })
+            .then(book => {
+                sessionStorage.setItem('editBookData', JSON.stringify(book));
+                window.location.href = '/inventory/edit?id=' + bookId;
+            })
+            .catch(err => {
+                alert(err.message);
+            });
+}

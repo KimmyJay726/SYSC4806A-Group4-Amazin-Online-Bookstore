@@ -137,28 +137,8 @@ body {
     background-color: #e68900;
 }
 
-/*Admin component*/
-.admin-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.admin-container h4 {
-    margin-right: 20px;
-    font-size: 1.1rem;
-}
-
-.admin-container input[type="text"] {
-    padding: 10px 12px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    transition: 0.2s;
-}
-
-.admin-container button {
+/*Styling for Action buttons*/
+.action-button {
     padding: 8px 15px;
     font-size: 14px;
     border-radius: 6px;
@@ -166,9 +146,12 @@ body {
     background-color: #ff9800;
     color: white;
     cursor: pointer;
+    display: block;
+    width: 100%;
+    margin: 4px auto;
 }
 
-.admin-container button:hover {
+.action-button:hover {
     background-color: #e68900;
 }
 
