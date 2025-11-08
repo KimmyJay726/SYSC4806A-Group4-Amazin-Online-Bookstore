@@ -23,6 +23,9 @@
         <div class="logged-in-as">
             Logged in as: <span id="usernameDisplay" th:text="${username}">Guest User</span>
         </div>
+        <button th:if="${client != null and not client.isOwner}" class="purchase-button" id="purchaseBtn" onclick="window.location.href='/purchase'">
+            Checkout
+        </button>
         <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
             Login / Register
         </button>
@@ -59,16 +62,6 @@
     <button type="button" class="submit-btn" id="submit-btn">Search</button>
 </div>
 
-<!-- Edit Book Button only if isOwner is true -->
-<div th:if="${client != null and client.isOwner}" class="admin-container">
-    <h4>Admin Edit Book</h4>
-    <div class="search-form">
-        <label for="editBookId">Book ID:</label>
-        <input type="text" id="editBookId" placeholder="Enter Book ID">
-    </div>
-    <button type="button" id="editBookBtn">Edit Book</button>
-</div>
-
 <hr>
 
 <!--Show list of books-->
@@ -85,6 +78,7 @@
             <th>Price</th>
             <th>Quantity</th>
             <th>Description</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody id="results">
@@ -101,6 +95,15 @@
 
             <td th:text="${book.numBooksAvailableForPurchase}"></td>
             <td th:text="${book.bookDescription}"></td>
+            <td>
+                <div th:if="${client != null and not client.isOwner}">
+                    <button th:if="${book.numBooksAvailableForPurchase > 0}" type="button" class="action-button" id="addToCart" th:onclick="'addBookToCart(' + ${book.id} + ')'">Add</button><br>
+                    <button th:if="${client.getShoppingCart().contains(book.id)}" type="button" class="action-button" id="removeFromCart" th:onclick="'removeBookFromCart(' + ${book.id} + ')'">Remove</button>
+                </div>
+                <div th:if="${client != null and client.isOwner}">
+                    <button type="button" class="action-button" id="editBook" th:onclick="'editBook(' + ${book.id} + ')'">Edit</button>
+                </div>
+            </td>
         </tbody>
     </table>
 </div>

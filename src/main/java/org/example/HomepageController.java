@@ -88,4 +88,9 @@ public class HomepageController {
             return "browse";
         }
     }
+
+    @GetMapping("/purchase")
+    public String purchase() {
+        return "purchase";  // Find the html template at src/main/resources/templates/purchase.html
+    }
 }
