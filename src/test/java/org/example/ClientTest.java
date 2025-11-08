@@ -86,7 +86,7 @@ public class ClientTest {
         );
 
         // Add the book to the cart
-        client.addToShoppingCart(book1);
+        client.addToShoppingCart(book1.getId());
         Assertions.assertEquals(1, client.getShoppingCart().size());
         Assertions.assertTrue(client.getShoppingCart().contains(book1.getId()));
     }
@@ -107,13 +107,13 @@ public class ClientTest {
         );
 
         // Add the book to the cart
-        client.addToShoppingCart(book1);
+        client.addToShoppingCart(book1.getId());
         Assertions.assertEquals(1, client.getShoppingCart().size());
 
         // Remove the book from cart
-        client.removeFromShoppingCart(book1);
+        client.removeFromShoppingCart(book1.getId());
         Assertions.assertEquals(0, client.getShoppingCart().size());
-        Assertions.assertFalse(client.getShoppingCart().contains(book1));
+        Assertions.assertFalse(client.getShoppingCart().contains(book1.getId()));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ClientTest {
         );
 
         // Add the book to purchase list
-        client.addToPurchasedBooks(book1);
+        client.addToPurchasedBooks(book1.getId());
         Assertions.assertEquals(1, client.getPurchasedBooks().size());
         Assertions.assertTrue(client.getPurchasedBooks().contains(book1.getId()));
     }

@@ -46,12 +46,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
         });
     }
-});
 
-function editBook(bookId) {
-    fetch('/books/' + bookId)
-         .then(response => {
-            if (!response.ok) throw new Error("Book not found");
+    window.editBook = function(bookId) {
+        fetch('/books/' + bookId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Book not found");
+                }
                 return response.json();
             })
             .then(book => {
@@ -60,5 +61,67 @@ function editBook(bookId) {
             })
             .catch(err => {
                 alert(err.message);
-            });
-}
+            }
+        );
+    }
+
+    window.addBookToCart = function(bookId) {
+        // Decrement stock for the book
+        fetch(`/books/${bookId}/purchaseBook`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Book not found");
+            }
+            return response.json();
+        })
+        .then(book => {
+            // Add the book to the client's shopping cart
+            return fetch(`/client/cart/add/${book.id}`, { method: 'POST' });
+        })
+        .then(response => {
+            if (!response.ok){
+                throw new Error("Error adding " + bookId + " to your cart")
+            }
+            return response.json();
+        })
+        .then(updatedClient => {
+            console.log("Updated shopping cart:", updatedClient.shoppingCart);
+            window.location.reload();
+        })
+        .catch(err => {
+            alert(err.message);
+        });
+    };
+
+    window.removeBookFromCart = function(bookId) {
+        // Increment stock for the book
+        fetch(`/books/${bookId}/returnBook`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error increasing stock for bookId" + bookId);
+            }
+            return response.json();
+        })
+        .then(book => {
+            // Remove the book from the client's shopping cart
+            return fetch(`/client/cart/remove/${book.id}`, { method: 'POST' });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error removing " + bookId + " from your cart");
+            }
+            return response.json();
+        })
+        .then(updatedClient => {
+            console.log("Updated shopping cart:", updatedClient.shoppingCart);
+            window.location.reload();
+        })
+        .catch(err => {
+            alert(err.message);
+        });
+    };
+});

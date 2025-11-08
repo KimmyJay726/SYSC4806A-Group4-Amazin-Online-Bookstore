@@ -94,8 +94,8 @@
             <td th:text="${book.bookDescription}"></td>
             <td>
                 <div th:if="${client != null and not client.isOwner}">
-                    <button type="button" class="action-button" id="addToCart" onclick="alert('Add to cart')">Add</button><br>
-                    <button type="button" class="action-button" id="removeFromCart" onclick="alert('Remove from cart')">Remove</button>
+                    <button th:if="${book.numBooksAvailableForPurchase > 0}" type="button" class="action-button" id="addToCart" th:onclick="'addBookToCart(' + ${book.id} + ')'">Add</button><br>
+                    <button th:if="${client.getShoppingCart().contains(book.id)}" type="button" class="action-button" id="removeFromCart" th:onclick="'removeBookFromCart(' + ${book.id} + ')'">Remove</button>
                 </div>
                 <div th:if="${client != null and client.isOwner}">
                     <button type="button" class="action-button" id="editBook" th:onclick="'editBook(' + ${book.id} + ')'">Edit</button>

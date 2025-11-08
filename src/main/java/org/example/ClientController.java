@@ -184,4 +184,78 @@ public class ClientController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    /**
+     * POST /client/cart/add/{bookId}
+     * Adds a book ID to the current client's shopping cart
+     * It is expected that the user is already logged in
+     *
+     * Example curl command for Windows:
+     * -------------------------------------------
+     * curl -X POST http://localhost:8080/client/cart/add/5
+     * -------------------------------------------
+     *
+     * Expected JSON response (updated client):
+     * -------------------------------------------
+     * {
+     *   "id": 1,
+     *   "username": "Bob",
+     *   "isOwner": false,
+     *   "password": "myPassword",
+     *   "shoppingCart": [5],
+     *   "purchasedBooks": []
+     * }
+     * -------------------------------------------
+     */
+    @PostMapping("/client/cart/add/{bookId}")
+    public ResponseEntity<?> addBookToCart(@PathVariable Long bookId, HttpSession session) {
+        // Get the current client
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+        }
+
+        // Add the book to the client's shopping cart
+        client.addToShoppingCart(bookId);
+        clientRepository.save(client);
+
+        return ResponseEntity.ok(client);
+    }
+
+    /**
+     * POST /client/cart/remove/{bookId}
+     * Removes a book ID from the current client's shopping cart
+     * It is expected that the user is already logged in
+     *
+     * Example curl command for Windows:
+     * -------------------------------------------
+     * curl -X POST http://localhost:8080/client/cart/remove/5
+     * -------------------------------------------
+     *
+     * Expected JSON response (updated client):
+     * -------------------------------------------
+     * {
+     *   "id": 1,
+     *   "username": "Bob",
+     *   "isOwner": false,
+     *   "password": "myPassword",
+     *   "shoppingCart": [],
+     *   "purchasedBooks": []
+     * }
+     * -------------------------------------------
+     */
+    @PostMapping("/client/cart/remove/{bookId}")
+    public ResponseEntity<?> removeBookFromCart(@PathVariable Long bookId, HttpSession session) {
+        // Get the current client
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+        }
+
+        // Add the book to the client's shopping cart
+        client.removeFromShoppingCart(bookId);
+        clientRepository.save(client);
+
+        return ResponseEntity.ok(client);
+    }
 }

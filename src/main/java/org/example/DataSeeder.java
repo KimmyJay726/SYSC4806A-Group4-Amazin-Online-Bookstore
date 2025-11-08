@@ -164,29 +164,29 @@ public class DataSeeder implements CommandLineRunner {
         // Book order: [Gatsby, Mockingbird, 1984, Pride&Prejudice, Catcher, LOTR, Harry Potter, The Road]
         
         Client safi = clientList.get(1);
-        safi.addToPurchasedBooks(bookList.get(0)); // The Great Gatsby
-        safi.addToPurchasedBooks(bookList.get(2)); // 1984
-        safi.addToPurchasedBooks(bookList.get(6)); // Harry Potter
+        safi.addToPurchasedBooks(bookList.get(0).getId()); // The Great Gatsby
+        safi.addToPurchasedBooks(bookList.get(2).getId()); // 1984
+        safi.addToPurchasedBooks(bookList.get(6).getId()); // Harry Potter
         clientRepository.save(safi);
         
         Client jake = clientList.get(2);
-        jake.addToPurchasedBooks(bookList.get(1)); // To Kill a Mockingbird
-        jake.addToPurchasedBooks(bookList.get(3)); // Pride and Prejudice
+        jake.addToPurchasedBooks(bookList.get(1).getId()); // To Kill a Mockingbird
+        jake.addToPurchasedBooks(bookList.get(3).getId()); // Pride and Prejudice
         clientRepository.save(jake);
         
         Client andrew = clientList.get(3);
-        andrew.addToPurchasedBooks(bookList.get(4)); // The Catcher in the Rye
-        andrew.addToPurchasedBooks(bookList.get(5)); // The Lord of the Rings
-        andrew.addToPurchasedBooks(bookList.get(7)); // The Road
+        andrew.addToPurchasedBooks(bookList.get(4).getId()); // The Catcher in the Rye
+        andrew.addToPurchasedBooks(bookList.get(5).getId()); // The Lord of the Rings
+        andrew.addToPurchasedBooks(bookList.get(7).getId()); // The Road
         clientRepository.save(andrew);
         
         Client fiona = clientList.get(4);
-        fiona.addToShoppingCart(bookList.get(0)); // The Great Gatsby
-        fiona.addToShoppingCart(bookList.get(4)); // The Catcher in the Rye
+        fiona.addToShoppingCart(bookList.get(0).getId()); // The Great Gatsby
+        fiona.addToShoppingCart(bookList.get(4).getId()); // The Catcher in the Rye
         clientRepository.save(fiona);
         
         Client jacob = clientList.get(5);
-        jacob.addToShoppingCart(bookList.get(2)); // 1984
+        jacob.addToShoppingCart(bookList.get(2).getId()); // 1984
         clientRepository.save(jacob);
         
         System.out.println("Added purchase history and shopping cart items to sample clients");

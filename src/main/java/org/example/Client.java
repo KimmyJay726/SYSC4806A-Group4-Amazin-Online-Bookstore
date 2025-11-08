@@ -111,20 +111,20 @@ public class Client {
 
     /**
      * Add a book to the client's shopping cart
-     * @param book the book to add
+     * @param bookId the ID of the book to add
      */
-    public void addToShoppingCart(Book book) { this.shoppingCartIds.add(book.getId()); }
+    public void addToShoppingCart(long bookId) { this.shoppingCartIds.add(bookId); }
 
     /**
      * Remove a book from the client's shopping cart
-     * @param book the book to remove
+     * @param bookId the ID of the book to remove
      */
-    public void removeFromShoppingCart(Book book) { this.shoppingCartIds.remove(book.getId()); }
+    public void removeFromShoppingCart(long bookId) { this.shoppingCartIds.remove(bookId); }
 
     /**
      * Add a book to the client's purchased books
-     * @param book the purchased book
+     * @param bookId the ID of the purchased book
      */
-    public void addToPurchasedBooks(Book book) { this.purchasedBookIds.add(book.getId()); }
+    public void addToPurchasedBooks(long bookId) { this.purchasedBookIds.add(bookId); }
 
 }

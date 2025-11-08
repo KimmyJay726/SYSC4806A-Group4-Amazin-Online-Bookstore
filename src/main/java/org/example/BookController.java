@@ -218,13 +218,13 @@ public class BookController {
     }
 
     /**
-     * GET /books/{id}/purchaseBook
+     * POST /books/{id}/purchaseBook
      * Returns a JSON Book object based on the ID.
      * Reduces the number of copies of the book available for purchase by 1 for each curl request.
      *
      * Example curl command for Windows:
      * -------------------------------------------
-     * curl.exe -i -X GET -H "Accept: application/json" http://localhost:8080/books/1/purchaseBook
+     * curl.exe -i -X POST -H "Accept: application/json" http://localhost:8080/books/1/purchaseBook
      * -------------------------------------------
      *
      * Expected JSON response:
@@ -232,7 +232,7 @@ public class BookController {
      * {"id":1,"bookTitle":"The Road","bookISBN":"XXXXX","bookPicture":null,"bookDescription":"This is a very sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":9}
      * -------------------------------------------
      */
-    @GetMapping("/books/{id}/purchaseBook")
+    @PostMapping("/books/{id}/purchaseBook")
     public ResponseEntity<Book> purchaseBook(@PathVariable(value = "id") Integer id) {
 
         Optional<Book> purchaseBook = bookRepository.findById(id);
@@ -242,8 +242,34 @@ public class BookController {
                 purchaseBook.get().setNumBooksAvailableForPurchase(purchaseBook.get().getNumBooksAvailableForPurchase()-1);
             }
         }
-         bookRepository.save(purchaseBook.get());
+        bookRepository.save(purchaseBook.get());
 
         return ResponseEntity.ok(purchaseBook.get());
+    }
+
+    /**
+     * POST /books/{id}/returnBook
+     * Returns a JSON Book object based on the ID.
+     * Increases the number of copies of the book available for purchase by 1 for each curl request.
+     *
+     * Example curl command for Windows:
+     * -------------------------------------------
+     * curl.exe -i -X POST -H "Accept: application/json" http://localhost:8080/books/1/returnBook
+     * -------------------------------------------
+     *
+     * Expected JSON response:
+     * -------------------------------------------
+     * {"id":1,"bookTitle":"The Road","bookISBN":"XXXXX","bookPicture":null,"bookDescription":"This is a very sad book.","bookAuthor":"Cormac McCarthy","bookPublisher":"Penguin","numBooksAvailableForPurchase":9}
+     * -------------------------------------------
+     */
+    @PostMapping("/books/{id}/returnBook")
+    public ResponseEntity<Book> returnBook(@PathVariable(value = "id") Integer id) {
+        Optional<Book> currentBook = bookRepository.findById(id);
+
+        int numBooks = currentBook.get().getNumBooksAvailableForPurchase() + 1;
+        currentBook.get().setNumBooksAvailableForPurchase(numBooks);
+        bookRepository.save(currentBook.get());
+
+        return ResponseEntity.ok(currentBook.get());
     }
 }
