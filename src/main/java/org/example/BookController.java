@@ -243,11 +243,16 @@ public class BookController {
         if (purchaseBook.isPresent()) {
             if (purchaseBook.get().getNumBooksAvailableForPurchase() >= 1) {
                 purchaseBook.get().setNumBooksAvailableForPurchase(purchaseBook.get().getNumBooksAvailableForPurchase()-1);
+                bookRepository.save(purchaseBook.get());
+                return ResponseEntity.ok(purchaseBook.get());
+            }
+            else{
+                return ResponseEntity.badRequest().build();
             }
         }
-        bookRepository.save(purchaseBook.get());
-
-        return ResponseEntity.ok(purchaseBook.get());
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
