@@ -194,7 +194,7 @@ public class BookController {
         editBook.setNumBooksAvailableForPurchase(form.getNumBooksAvailableForPurchase());
         editBook.setBookDescription(form.getBookDescription());
 
-        MultipartFile file = form.getBookPicture(); // same as 'file' in your example
+        MultipartFile file = form.getBookPicture();
         if (file != null && !file.isEmpty()) {
             try {
                 String uploadDir = "uploads/";
