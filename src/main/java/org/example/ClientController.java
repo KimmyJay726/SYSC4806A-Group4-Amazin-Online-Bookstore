@@ -7,6 +7,8 @@
 package org.example;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import java.util.Optional;
 @Controller
 public class ClientController {
 
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
     @Autowired
     private ClientRepository clientRepository;
 
@@ -108,6 +112,7 @@ public class ClientController {
 
         // Store in session
         session.setAttribute("loggedInClient", client);
+        logger.info("Client {} logged in", client.getUsername());
         return ResponseEntity.ok(Map.of("message", "Login successful"));
     }
 
