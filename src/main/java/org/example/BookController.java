@@ -180,7 +180,7 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        Optional<Book> editBookOpt = bookRepository.findById(id);
+        Optional<Book> editBookOpt = Optional.ofNullable(bookRepository.findById(id));
         if (editBookOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
