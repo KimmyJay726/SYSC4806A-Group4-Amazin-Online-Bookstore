@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Bookstore</title>
+
+    <link rel="stylesheet" th:href="@{/css/checkout.css}">
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            <a href="/" style="text-decoration: none; color: inherit;">Amazin Online Bookstore</a>
+        </div>
+    </div>
+    <div class="navbar-actions">
+        <a th:if="${client != null and client.isOwner == true}" href="/addBook" class="add-book-button">
+            Add Book
+        </a>
+    </div>
+</header>
+
+<h1>📚 Finalize Your Order</h1>
+
+<div class="container">
+
+    <div th:if="${param.success}" class="payment-feedback success">
+        <h2>🎉 Payment Complete!</h2>
+        <p>Thank you for your order! Your payment was processed successfully and your cart has been emptied.</p>
+        <p>You can now <a href="/">return to the homepage</a>.</p>
+    </div>
+
+    <div class="main-content" th:unless="${param.success}">
+        <form id="checkoutForm" action="/checkout" method="POST">
+
+            <div class="form-section shipping-info">
+                <h2>1. Shipping Information</h2>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+            </div>
+
+            <div class="form-section payment-info">
+                <h2>2. Payment Information</h2>
+                <div class="form-group">
+                    <label for="cardNumber">Credit Card Number</label>
+                    <input type="text" id="cardNumber" name="cardNumber"  maxlength="16" placeholder="16-digit card number" required>
+                </div>
+                <div class="expiration-cvv">
+                    <div class="form-group expiry-group">
+                        <label for="expiry">Expiry (MM/YY)</label>
+                        <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required>
+                    </div>
+                    <div class="form-group cvv-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" name="cvv" maxlength="4" required>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="sidebar" th:unless="${param.success}">
+        <h2>🛍️ Your Order</h2>
+
+        <div id="cart-items-list">
+            <div class="cart-item" th:each="item : ${cartItems}">
+                <div class="cart-item-details">
+                    <h4 th:text="${item.bookTitle}">Book Title Placeholder</h4>
+                    <small>Qty: 1</small>
+                </div>
+                <div class="cart-item-price"
+                     th:text="'$' + ${#numbers.formatDecimal(item.bookPrice, 0, 2)}">
+                    $0.00
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(cartItems)}">
+                <p>Your cart is empty.</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="order-summary-details">
+            <div class="order-summary-item">
+                <span>Subtotal:</span>
+                <span id="subtotal" th:text="'$' + ${#numbers.formatDecimal(subtotal, 0, 2)}">$0.00</span>
+            </div>
+            <div class="order-summary-item">
+                <span>Shipping:</span>
+                <span id="shipping" th:text="'$' + ${#numbers.formatDecimal(shippingCost, 0, 2)}">$5.00</span>
+            </div>
+            <div class="order-summary-item">
+                <span>Tax (7%):</span>
+                <span id="tax" th:text="'$' + ${#numbers.formatDecimal(tax, 0, 2)}">$0.00</span>
+            </div>
+        </div>
+
+        <div class="order-summary-total">
+            <span>Order Total:</span>
+            <span id="order-total" th:text="'$' + ${#numbers.formatDecimal(orderTotal, 0, 2)}">$0.00</span>
+        </div>
+
+        <button type="submit" class="place-order-btn" form="checkoutForm">
+            Place Order & Pay <span id="button-total" th:text="'$' + ${#numbers.formatDecimal(orderTotal, 0, 2)}">$0.00</span>
+        </button>
+    </div>
+
+</div>
+
+<script th:src="@{/checkout.js}"></script>
+</body>
+</html>

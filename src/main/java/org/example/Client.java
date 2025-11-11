@@ -127,4 +127,14 @@ public class Client {
      */
     public void addToPurchasedBooks(long bookId) { this.purchasedBookIds.add(bookId); }
 
+    /**
+     * Clears the shoppingCart once payment is made
+     */
+    public void clearShoppingCart() {
+
+        if (this.shoppingCartIds != null) {
+            this.shoppingCartIds.clear();
+        }
+    }
+
 }

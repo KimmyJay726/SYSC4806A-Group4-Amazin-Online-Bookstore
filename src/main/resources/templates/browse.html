@@ -23,7 +23,7 @@
         <div class="logged-in-as">
             Logged in as: <span id="usernameDisplay" th:text="${username}">Guest User</span>
         </div>
-        <button th:if="${client != null and not client.isOwner}" class="purchase-button" id="purchaseBtn" onclick="window.location.href='/purchase'">
+        <button th:if="${client != null and not client.isOwner}" class="purchase-button" id="purchaseBtn" onclick="window.location.href='/checkout'">
             Checkout
         </button>
         <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
