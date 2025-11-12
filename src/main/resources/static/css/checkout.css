@@ -1,0 +1,230 @@
+/* ========================================= */
+/* 1. TOP BAR STYLES (FROM MAIN PAGE)        */
+/* ========================================= */
+/* General Resets - Keep main body styles separate if they conflict with checkout layout */
+/* The body styles for the top bar are placed here for consistency but will be merged below */
+
+.top-bar {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Separates the header from the content below */
+}
+
+/* Icon Location Component */
+.site-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icon Component */
+.site-icon {
+    font-size: 1.5em;
+    color: #FFEB3B;
+}
+
+/* Site Name Component in Top Bar*/
+.site-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+/* User Info Component */
+.user-info-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Displaying who is logged in Component in Top Bar*/
+.logged-in-as {
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+/* Login Button Component in Top Bar*/
+.login-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+/* Purchase Button in the Top Bar (used for Checkout) */
+.purchase-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.purchase-button:hover {
+    background-color: #388E3C;
+}
+
+/* ========================================= */
+/* 2. CHECKOUT PAGE STYLES (LAYOUT)          */
+/* ========================================= */
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #f4f4f9; /* Using the background color from your main page styles */
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin: 30px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 20px;
+}
+
+.main-content {
+    flex: 2;
+}
+
+.sidebar {
+    flex: 1;
+    padding: 20px;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    max-height: fit-content;
+}
+
+/* --- Form Styles --- */
+.form-section {
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.form-section h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Special layout for Expiry/CVV fields */
+.expiration-cvv {
+    display: flex;
+    gap: 20px;
+}
+
+.expiry-group, .cvv-group {
+    flex: 1;
+}
+
+/* --- Order Summary Styles --- */
+.cart-item {
+    display: flex;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-details h4 {
+    margin: 0;
+}
+
+.cart-item-price {
+    font-weight: bold;
+    min-width: 80px;
+    text-align: right;
+}
+
+.order-summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.order-summary-total {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px solid #555;
+}
+
+/* Checkout Button */
+.place-order-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #28a745; /* Slightly darker green than the purchase button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.place-order-btn:hover {
+    background-color: #218838;
+}
