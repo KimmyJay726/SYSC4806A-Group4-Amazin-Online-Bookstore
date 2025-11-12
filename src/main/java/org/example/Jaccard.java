@@ -1,6 +1,8 @@
 /**
  * Jaccard Component
  *
+ * Used to calculate the jaccard index between the active client and the other clients,
+ * and make book recommendations to the active client accordingly
  */
 
 package org.example;
