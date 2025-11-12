@@ -179,17 +179,19 @@ public class BookController {
             @ModelAttribute BookForm form,
             HttpSession session) {
 
-        // Optional: check if client is owner
+        //Check if client is owner
         Client client = (Client) session.getAttribute("loggedInClient");
         if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        //Find the book in the repository
         Optional<Book> editBookOpt = bookRepository.findById(id);
         if (editBookOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
+        //Edit all the details that the user wanted.
         Book editBook = editBookOpt.get();
         editBook.setBookISBN(form.getBookISBN());
         editBook.setBookTitle(form.getBookTitle());
@@ -199,7 +201,8 @@ public class BookController {
         editBook.setNumBooksAvailableForPurchase(form.getNumBooksAvailableForPurchase());
         editBook.setBookDescription(form.getBookDescription());
 
-        MultipartFile file = form.getBookPicture(); // same as 'file' in your example
+        //Handle image files as multipart files
+        MultipartFile file = form.getBookPicture();
         if (file != null && !file.isEmpty()) {
             try {
                 String uploadDir = "uploads/";
@@ -208,7 +211,7 @@ public class BookController {
                     Files.createDirectories(uploadPath);
                 }
 
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String fileName = file.getOriginalFilename();
                 Path filePath = uploadPath.resolve(fileName);
                 Files.write(filePath, file.getBytes());
                 editBook.setBookPicture("/uploads/" + fileName);
@@ -245,11 +248,16 @@ public class BookController {
         if (purchaseBook.isPresent()) {
             if (purchaseBook.get().getNumBooksAvailableForPurchase() >= 1) {
                 purchaseBook.get().setNumBooksAvailableForPurchase(purchaseBook.get().getNumBooksAvailableForPurchase()-1);
+                bookRepository.save(purchaseBook.get());
+                return ResponseEntity.ok(purchaseBook.get());
+            }
+            else{
+                return ResponseEntity.badRequest().build();
             }
         }
-        bookRepository.save(purchaseBook.get());
-
-        return ResponseEntity.ok(purchaseBook.get());
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**

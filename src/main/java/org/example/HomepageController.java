@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,8 +92,98 @@ public class HomepageController {
         }
     }
 
-    @GetMapping("/purchase")
-    public String purchase() {
-        return "purchase";  // Find the html template at src/main/resources/templates/purchase.html
+    @GetMapping("/checkout")
+    public String viewCheckout(HttpSession session, Model model) {
+
+        Client client = (Client) session.getAttribute("loggedInClient");
+
+        if (client == null) {
+            return "redirect:/login-register";
+        }
+
+
+        Optional<Client> refreshedClientOpt = clientRepository.findById((int) client.getId());
+        if (refreshedClientOpt.isEmpty()) {
+            return "redirect:/login-register";
+        }
+
+        Client refreshedClient = refreshedClientOpt.get();
+        List<Long> cartBookIds = refreshedClient.getShoppingCart();
+
+        session.setAttribute("loggedInClient", refreshedClient);
+
+        List<Book> cartItems = new ArrayList<>();
+        double subtotal = 0.0;
+
+
+        for (Long bookId : cartBookIds) {
+
+            Integer bookIdInt = bookId.intValue();
+
+            Optional<Book> bookOpt = bookRepository.findById(bookIdInt); // Use the Integer ID
+
+            if (bookOpt.isPresent()) {
+                Book book = bookOpt.get();
+                cartItems.add(book);
+                subtotal += book.getBookPrice();
+            }
+        }
+
+        final double SHIPPING_COST = 5.00;
+        final double TAX_RATE = 0.07;
+
+        double tax = subtotal * TAX_RATE;
+        double total = subtotal + tax + SHIPPING_COST;
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("shippingCost", SHIPPING_COST);
+        model.addAttribute("tax", tax);
+        model.addAttribute("orderTotal", total);
+        model.addAttribute("client", refreshedClient);
+
+
+        return "checkout";
+    }
+
+    @PostMapping("/checkout")
+    public String processCheckout(
+            @RequestParam String fullName,
+            @RequestParam String cardNumber, // Captures the credit card number from the form
+            // Add other form fields here: @RequestParam String expiry, @RequestParam String cvv,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        Client client = (Client) session.getAttribute("loggedInClient");
+
+        if (client == null) {
+            return "redirect:/login-register";
+        }
+
+        //SIMULATE PAYMENT PROCESSING
+
+        boolean paymentSuccessful = true;
+
+        if (paymentSuccessful) {
+
+            //Clear the cart on the Client object (requires the clearShoppingCart() method in Client.java)
+            client.clearShoppingCart();
+
+            // Save the updated Client object (with the empty cart) to the database
+            clientRepository.save(client);
+
+            //Update the session with the newly saved client object
+            session.setAttribute("loggedInClient", client);
+
+            // Redirect back to the GET /checkout with a 'success' parameter
+            // The GET method will see this parameter and display the "Payment Complete" feedback.
+            redirectAttributes.addAttribute("success", "true");
+
+            return "redirect:/checkout";
+        } else {
+            // Handle failed payment (e.g., redirect with an error message)
+            redirectAttributes.addAttribute("error", "Payment failed. Please try again.");
+            return "redirect:/checkout";
+        }
     }
 }
