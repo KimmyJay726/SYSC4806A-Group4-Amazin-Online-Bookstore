@@ -8,6 +8,8 @@ package org.example;
 
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.boot.model.internal.CreateKeySecondPass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 
@@ -27,6 +30,7 @@ import java.util.Optional;
 
 @Controller
 public class BookController {
+    private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @Autowired
     private BookRepository bookRepository;
@@ -147,6 +151,7 @@ public class BookController {
         }
 
         Book savedBook = bookRepository.save(book);
+        logger.info("Book added: {} by user {} ", book.getBookTitle(), client.getUsername());
         return ResponseEntity.ok(savedBook);
     }
 
