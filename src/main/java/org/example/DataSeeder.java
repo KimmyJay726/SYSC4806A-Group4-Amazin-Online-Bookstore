@@ -166,15 +166,18 @@ public class DataSeeder implements CommandLineRunner {
         Client safi = clientList.get(1);
         safi.addToPurchasedBooks(bookList.get(0).getId()); // The Great Gatsby
         safi.addToPurchasedBooks(bookList.get(2).getId()); // 1984
+        safi.addToPurchasedBooks(bookList.get(3).getId()); // Pride and Prejudice
         safi.addToPurchasedBooks(bookList.get(6).getId()); // Harry Potter
         clientRepository.save(safi);
         
         Client jake = clientList.get(2);
         jake.addToPurchasedBooks(bookList.get(1).getId()); // To Kill a Mockingbird
+        jake.addToPurchasedBooks(bookList.get(2).getId()); // 1984
         jake.addToPurchasedBooks(bookList.get(3).getId()); // Pride and Prejudice
         clientRepository.save(jake);
         
         Client andrew = clientList.get(3);
+        andrew.addToPurchasedBooks(bookList.get(1).getId()); // To Kill a Mockingbird
         andrew.addToPurchasedBooks(bookList.get(4).getId()); // The Catcher in the Rye
         andrew.addToPurchasedBooks(bookList.get(5).getId()); // The Lord of the Rings
         andrew.addToPurchasedBooks(bookList.get(7).getId()); // The Road

@@ -20,6 +20,9 @@ import java.util.Optional;
 public class HomepageController {
 
     @Autowired
+    private Jaccard jaccard;
+
+    @Autowired
     private BookRepository bookRepository;
 
     @Autowired
@@ -78,6 +81,38 @@ public class HomepageController {
         model.addAttribute("books", books);
 
         return "browse";
+    }
+
+    @GetMapping("/recommendations")
+    public String showRecommendations(
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String publisher,
+            HttpSession session,
+            Model model) {
+
+        // Add client information for navbar
+        Client client = (Client) session.getAttribute("loggedInClient");
+        if (client != null) {
+            model.addAttribute("client", client);
+            model.addAttribute("username", client.getUsername());
+
+            List<Long> recommendedBookIds = jaccard.recommendedBooks(client);
+            List<Book> recommendedBooks = new ArrayList<>();
+
+            for (Long bookId : recommendedBookIds) {
+                recommendedBooks.add(bookRepository.findById(bookId));
+            }
+            model.addAttribute("books", recommendedBooks);
+        }
+
+        else {
+            List<Book> recommendedBooks = (List<Book>) bookRepository.findAll();
+            model.addAttribute("books", recommendedBooks);
+        }
+
+        return "recommendations";
     }
 
     @GetMapping("/inventory/edit")

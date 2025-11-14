@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recommendations</title>
+    <link rel="stylesheet" href="/css/recommendations.css">
+</head>
+<body>
+
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            <a href="/" style="text-decoration: none; color: inherit;">Amazin Online Bookstore</a>
+        </div>
+    </div>
+    <div class="user-info-group">
+        <div class="logged-in-as">
+            Logged in as: <span id="usernameDisplay" th:text="${username}">Guest User</span>
+        </div>
+        <button th:if="${client != null and not client.isOwner}" class="purchase-button" id="purchaseBtn" onclick="window.location.href='/checkout'">
+            Checkout
+        </button>
+        <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
+            Login / Register
+        </button>
+    </div>
+</header>
+
+<hr>
+
+<!--Show list of books-->
+<div th:if="${books.size() > 0}">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Picture</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <body id="results">
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.bookISBN}"></td>
+            <td th:text="${book.bookTitle}"></td>
+            <td>
+                <img th:src="${book.bookPicture}" width="80" height="100">
+            </td>
+            <td th:text="${book.bookAuthor}"></td>
+            <td th:text="${book.bookPublisher}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(book.bookPrice, 1, 2)}"></td>
+
+            <td th:text="${book.numBooksAvailableForPurchase}"></td>
+            <td th:text="${book.bookDescription}"></td>
+            <td>
+                <div th:if="${client != null and not client.isOwner}">
+                    <button th:if="${book.numBooksAvailableForPurchase > 0}" type="button" class="action-button" id="addToCart" th:onclick="'addBookToCart(' + ${book.id} + ')'">Add</button><br>
+                    <button th:if="${client.getShoppingCart().contains(book.id)}" type="button" class="action-button" id="removeFromCart" th:onclick="'removeBookFromCart(' + ${book.id} + ')'">Remove</button>
+                </div>
+                <div th:if="${client != null and client.isOwner}">
+                    <button type="button" class="action-button" id="editBook" th:onclick="'editBook(' + ${book.id} + ')'">Edit</button>
+                </div>
+            </td>
+            </tbody>
+    </table>
+</div>
+
+<!-- Main JS for Browsing -->
+<script src="/js/browse.js"></script>
+
+<!-- JS for the login -->
+<script src="/js/index.js"></script>
+<script src="/js/login-register.js"></script>
+
+</body>
+</html>

@@ -186,7 +186,7 @@ public class BookController {
         }
 
         //Find the book in the repository
-        Optional<Book> editBookOpt = bookRepository.findById(id);
+        Optional<Book> editBookOpt = Optional.ofNullable(bookRepository.findById(id));
         if (editBookOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
