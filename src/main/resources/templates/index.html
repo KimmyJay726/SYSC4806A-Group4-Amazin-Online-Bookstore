@@ -35,17 +35,17 @@
     <div class="feature-buttons">
 
          <a th:if="${client != null and client.isOwner == true}" href="/addBook" class="feature-button button-purchase">
-             **ADD BOOK**
+             ADD BOOK
              <span class="button-note">(Add a new book to inventory)</span>
          </a>
 
         <a href="/inventory" class="feature-button button-browse">
-            **BROWSE CATALOG** (Temp)
+            BROWSE CATALOG
             <span class="button-note">(Route to Inventory Page)</span>
         </a>
 
-        <a href="/recommendations" class="feature-button button-recs">
-            **YOUR RECOMMENDATIONS** (Temp)
+        <a th:if="${client != null and not client.isOwner}" href="/recommendations" class="feature-button button-recs">
+            YOUR RECOMMENDATIONS
             <span class="button-note">(Route to Login page if not logged in)</span>
         </a>
 
