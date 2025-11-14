@@ -22,7 +22,7 @@
             Checkout
         </button>
         <button class="login-button" id="loginLogoutBtn" onclick="window.location.href='/login-register'">
-            Login / Register
+            Logout
         </button>
     </div>
 </header>
@@ -46,7 +46,7 @@
             <th>Action</th>
         </tr>
         </thead>
-        <body id="results">
+        <tbody id="results">
         <tr th:each="book : ${books}">
             <td th:text="${book.id}"></td>
             <td th:text="${book.bookISBN}"></td>
@@ -78,7 +78,6 @@
 
 <!-- JS for the login -->
 <script src="/js/index.js"></script>
-<script src="/js/login-register.js"></script>
 
 </body>
 </html>
