@@ -150,7 +150,6 @@ public class HomepageController {
         List<Book> cartItems = new ArrayList<>();
         double subtotal = 0.0;
 
-
         for (Long bookId : cartBookIds) {
 
             Integer bookIdInt = bookId.intValue();
@@ -176,7 +175,6 @@ public class HomepageController {
         model.addAttribute("tax", tax);
         model.addAttribute("orderTotal", total);
         model.addAttribute("client", refreshedClient);
-
 
         return "checkout";
     }
