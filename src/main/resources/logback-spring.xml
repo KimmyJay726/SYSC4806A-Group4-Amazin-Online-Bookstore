@@ -8,7 +8,6 @@
     </appender>
 
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
-
         <labels>
             app=bookstore
             service=amazin-bookstore
@@ -16,13 +15,16 @@
         </labels>
 
         <http>
-            <url>http://localhost:3100/loki/api/v1/push</url>
+            <url>${LOKI_URL:-http://localhost:3100}/loki/api/v1/push</url>
+            <auth>
+                <username>${LOKI_USER:-}</username>
+                <password>${LOKI_TOKEN:-}</password>
+            </auth>
         </http>
 
         <message>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </message>
-
     </appender>
 
     <root level="DEBUG">
