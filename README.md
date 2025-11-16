@@ -37,23 +37,27 @@ This schema is derived directly from the UML diagram.
 
 ### Table: `Users` (Derived from Client Class)
 
-| Field Name | Data Type | Constraints / Description |
-| :--- | :--- | :--- |
-| **id** | `Long` | **Primary Key**. Unique identifier for the user/client. |
-| **username** | `String` | Unique display name. |
-| **password** | `String` | Hashed password for authentication. |
-| **isOwner** | `Boolean` | Flag indicating if the user is an administrator/owner. |
+| Field Name | Data Type | Constraints / Description                               |
+| :--- |:----------|:--------------------------------------------------------|
+| **id** | `Long`    | **Primary Key**. Unique identifier for the user/client. |
+| **username** | `String`  | Unique display name.                                    |
+| **password** | `String`  | Hashed password for authentication.                     |
+| **isOwner** | `Boolean` | Flag indicating if the user is an administrator/owner.  |
+| **shoppingCartIds** | `List`    | Lists the IDs of books in the user's shopping cart.     |
+| **purchasedBookIds** | `List`    | Lists the IDs of books purchased by the user.           |
 
 ### Table: `Books` (Derived from Book Class)
 
 | Field Name | Data Type | Constraints / Description |
-| :--- | :--- | :--- |
-| **id** | `Long` | **Primary Key**. Unique identifier for the book. |
-| **bookISBN** | `String` | Unique identifier for the book (**ISBN**). |
-| **bookAuthor** | `String` | Author's name. |
-| **bookPublisher** | `String` | Publisher's name. |
-| **bookDescription** | `Text` | Detailed summary or description of the book. |
-| **bookPicture** | `String` | URL or path to the external image file. |
+| :--- |:----------| :--- |
+| **id** | `Long`    | **Primary Key**. Unique identifier for the book. |
+| **bookTitle** | `String`  | Title of the book. |
+| **bookISBN** | `String`  | Unique identifier for the book (**ISBN**). |
+| **bookPitcure** | `String`  | Source of the image of the book cover. |
+| **bookDescription** | `String`  | Detailed summary or description of the book. |
+| **bookAuthor** | `String`  | Author's name. |
+| **bookPublisher** | `String`  | Publisher's name. |
+| **bookPrice** | `Double` | Book price. |
 
 ### Relationship Table: `Cart` (Handles the `shoppingCart` relationship)
 
