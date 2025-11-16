@@ -42,6 +42,7 @@ public class BookController {
     @GetMapping("/books/all")
     @ResponseBody
     public List<Book> getAllBooks() {
+
         return (List<Book>) bookRepository.findAll();
     }
 
@@ -65,7 +66,10 @@ public class BookController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error reading file: " + filename);
         }
+
+        logger.info("Uploaded file: " + filename);
         return ResponseEntity.notFound().build();
     }
 
@@ -85,18 +89,23 @@ public class BookController {
         //Go through the filters and return the books.
         //TODO make it cross-check each filter.
         if (isbn != null && !isbn.isEmpty()) {
+            logger.info("Finding books by isbn: " + isbn);
             books = bookRepository.findByBookISBN(isbn);
         }
         else if (title != null && !title.isEmpty()) {
+            logger.info("Finding books by title: " + title);
             books = bookRepository.findByBookTitle(title);
         }
         else if (author != null && !author.isEmpty()) {
+            logger.info("Finding books by author: " + author);
             books = bookRepository.findByBookAuthor(author);
         }
         else if (publisher != null && !publisher.isEmpty()) {
+            logger.info("Finding books by publisher: " + publisher);
             books = bookRepository.findByBookPublisher(publisher);
         }
         else {
+            logger.info("Getting all books");
             books = (List<Book>) bookRepository.findAll();
         }
 
@@ -151,7 +160,7 @@ public class BookController {
         }
 
         Book savedBook = bookRepository.save(book);
-        logger.info("Book added: {} by user {} ", book.getBookTitle(), client.getUsername());
+        logger.info("Book added: {} by user: {} ", book.getBookTitle(), client.getUsername());
         return ResponseEntity.ok(savedBook);
     }
 
@@ -222,6 +231,7 @@ public class BookController {
         }
 
         bookRepository.save(editBook);
+        logger.info("Book edited: {} by user: {} ", editBook.getBookTitle(), client.getUsername());
         return ResponseEntity.ok(editBook);
     }
 
@@ -247,11 +257,18 @@ public class BookController {
 
         if (purchaseBook.isPresent()) {
             if (purchaseBook.get().getNumBooksAvailableForPurchase() >= 1) {
+                logger.info("Book {} available for purchase. There are currently {} copies",
+                        purchaseBook.get().getBookTitle(), purchaseBook.get().getNumBooksAvailableForPurchase());
+
                 purchaseBook.get().setNumBooksAvailableForPurchase(purchaseBook.get().getNumBooksAvailableForPurchase()-1);
                 bookRepository.save(purchaseBook.get());
+
                 return ResponseEntity.ok(purchaseBook.get());
             }
             else{
+                logger.error("Book {} not available for purchase. There are currently {} copies",
+                        purchaseBook.get().getBookTitle(), purchaseBook.get().getNumBooksAvailableForPurchase());
+
                 return ResponseEntity.badRequest().build();
             }
         }
@@ -282,6 +299,8 @@ public class BookController {
         int numBooks = currentBook.get().getNumBooksAvailableForPurchase() + 1;
         currentBook.get().setNumBooksAvailableForPurchase(numBooks);
         bookRepository.save(currentBook.get());
+        logger.info("Book {} returned. There are now {} copies available for purchase",
+                currentBook.get().getBookTitle(), numBooks);
 
         return ResponseEntity.ok(currentBook.get());
     }
