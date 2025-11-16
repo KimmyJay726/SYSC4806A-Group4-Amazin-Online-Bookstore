@@ -102,6 +102,7 @@ public class ClientController {
 
         Optional<Client> clientOpt = clientRepository.findByUsername(username);
         if (clientOpt.isEmpty()) {
+            logger.error("User {} does not exist.",  username);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         }
 
@@ -218,6 +219,7 @@ public class ClientController {
         // Get the current client
         Client client = (Client) session.getAttribute("loggedInClient");
         if (client == null) {
+            logger.error("ERROR: User is not logged in to add to cart.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
         }
 
@@ -256,6 +258,7 @@ public class ClientController {
         // Get the current client
         Client client = (Client) session.getAttribute("loggedInClient");
         if (client == null) {
+            logger.error("ERROR: User is not logged in to remove from cart.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
         }
 
