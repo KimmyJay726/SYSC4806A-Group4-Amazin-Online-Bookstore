@@ -4,28 +4,30 @@ The goal of this project is to develop an **online bookstore application** with 
 
 ---
 
-## Project Status: Current Sprint (Sprint #2)
+## Project Status: Current Sprint (Sprint #4)
 
-Kanban board status as of: **November 1, 2025**
-| Kanban Column | Key Deliverables/Issues |
-| :--- | :--- |
-| **Done** | - Create main and login HTML pages (**#2** and **#1**)<br>- Create User Controller and Book Java/Controller classes (**#11** and **#12**)<br>- Reformat Project Structure (**#22**)<br>- Create Azure web app & Pass Workflow Check (**#16** and **#18**) |
-| **In Progress** | - Create updated UML class diagram (**#15**)<br>- Create updated README and database schema (**#14**)<br>- Create editBook HTML page (**#7**) |
-| **To Do** | - Create addBook HTML page (**#6**) |
-| **In Review** | - Create browse HTML page (**#3**)|
+Kanban board status as of: **November 15, 2025**
+
+|Kanban Column	|Key Deliverables/Issues|
+|---|-|
+| **Done** | - Create recommendations HTML page and add recommendations feature (**#5**)<br>- Add logging to java classes (**#59**)<br>- Add Shopping Cart Nav button to top Nav Bar (**#34**)<br>- Add buttons to add/remove book to/from Shopping Cart (**#35**)<br>- Add tests for testing endpoints (**#61**)<br>- Add purchasing logic (**#62**)<br>- Add Logging (Project Topic) (**#21**)<br> - Add Logging documentation (**#67**) |
+| **In Progress** | - Setup Loki Grafana with Microsoft Azure (**#57**)<br>- Create video explaining Loki Grafana |
+| **To Do** | - Add MockMVC tests (**#56**) |
+| **In Review** | - Add logging errors (**#68**) |
 
 ---
 
-## Next Sprint Plan (Sprint #3)
+## Next Sprint Plan (Sprint #5)
 
-Next Sprint Scheduled for: **November 8, 2025**
+Next Sprint Scheduled for: **November 22, 2025**
+
 | Assignee | New Issues |
-| :--- | :--- |
-| **Jake** | Create recommendations HTML page #5, Update README and database schema (Sprint #2) #36 |
-| **Fiona** | Create Shopping Cart Nav button to top Nav Bar #34, Create Buttons to add book to Shopping Cart #35 |
-| **Andrew** | Create editBook HTML page #7, Create updated UML class diagram#15, Create Tests for Endpoint Testing #37 |
-| **Jacob** | Create purchase HTML page #4, Determine and implement a way to initialize an Owner User #33, Create Hook to redirect user who is currently not logged in to the Login/Register Page when navigating #32 |
-| **Safi** | Add Logging (Project Topic) #21, Create a demo.md file #38 |
+|----------|---|
+| **Jake** | Fix recommendations feature so that newly purchased books are not recommended #65, Add tests for recommendations feature #66 |
+| **Fiona** | Add button to route back to homepage from the login page #51 |
+| **Andrew** | Create MockMVC tests #56 |
+| **Jacob** | Add verification to purchasing feature #44 Enhance purchasing page #63 |
+| **Safi** | Add fuzzy matching #43 |
 
 ---
 
@@ -77,6 +79,13 @@ This schema is derived directly from the UML diagram.
 
 - https://amazin-online-bookstore-group4.azurewebsites.net/ 
 
+### Link to the Loki server:
+- http://loki:3100
+
+### Link to Grafana:
+- http://localhost:3000
+
 ### Use the following to create an admin account:
 
-curl -X POST http://localhost:8080/client/register -H "Content-Type: application/json" -d '{"username": "admin", "password": "admin", "isOwner": true}' Then login with username: admin, password: admin
+- curl -X POST http://localhost:8080/client/register -H "Content-Type: application/json" -d '{"username": "admin", "password": "admin", "isOwner": true}' 
+- Then login with username: admin, password: admin
