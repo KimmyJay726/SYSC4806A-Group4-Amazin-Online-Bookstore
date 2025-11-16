@@ -12,7 +12,7 @@
         <labels>
             app=bookstore
             service=amazin-bookstore
-            **level=%level**
+            level=%level
         </labels>
 
         <http>
