@@ -66,7 +66,7 @@ public class BookController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error reading file: " + filename);
+            logger.error("ERROR: Failed to read file: {}", filename);
         }
 
         logger.info("Uploaded file: " + filename);
@@ -155,6 +155,7 @@ public class BookController {
                 Files.write(filePath, file.getBytes());
                 book.setBookPicture("/uploads/" + fileName);
             } catch (IOException e) {
+                logger.error("ERROR: Failed to read file.");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }
@@ -191,12 +192,14 @@ public class BookController {
         //Check if client is owner
         Client client = (Client) session.getAttribute("loggedInClient");
         if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
+            logger.error("ERROR: User {} is not the owner.", client.getUsername());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         //Find the book in the repository
         Optional<Book> editBookOpt = Optional.ofNullable(bookRepository.findById(id));
         if (editBookOpt.isEmpty()) {
+            logger.error("ERROR: Book with id: {} not found", id);
             return ResponseEntity.notFound().build();
         }
 
@@ -266,13 +269,14 @@ public class BookController {
                 return ResponseEntity.ok(purchaseBook.get());
             }
             else{
-                logger.error("Book {} not available for purchase. There are currently {} copies",
+                logger.error("ERROR: Book {} not available for purchase. There are currently {} copies",
                         purchaseBook.get().getBookTitle(), purchaseBook.get().getNumBooksAvailableForPurchase());
 
                 return ResponseEntity.badRequest().build();
             }
         }
         else{
+            logger.error("ERROR: Book not Found.");
             return ResponseEntity.notFound().build();
         }
     }
