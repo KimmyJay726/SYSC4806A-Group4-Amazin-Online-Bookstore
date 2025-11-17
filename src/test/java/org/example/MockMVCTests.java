@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +15,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.thymeleaf.spring6.expression.Mvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,6 +30,36 @@ public class MockMVCTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Welcome to the Amazin Online Bookstore Nexus!")))
                 .andExpect(content().string(containsString("BROWSE CATALOG")));
+
+        //Sign in as admin
+        MvcResult loginAttempt = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\": \"admin\", \"password\": \"admin\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MockHttpSession session = (MockHttpSession) loginAttempt.getRequest().getSession();
+
+        //Check that the add book button exists for owner
+        mockMvc.perform(get("/")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("ADD BOOK")));
+
+        //Login as normal user
+        loginAttempt = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\": \"andrew\", \"password\": \"password2\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        session = (MockHttpSession) loginAttempt.getRequest().getSession();
+
+        //Check that the recommendation button exists users
+        mockMvc.perform(get("/")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("YOUR RECOMMENDATIONS")));
     }
 
     @Test
@@ -269,11 +297,6 @@ public class MockMVCTests {
                         .with(request -> { request.setMethod("POST"); return request; }))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookPicture").value("/uploads/cover.jpg"));
-    }
-
-    @Test
-    public void recommendationPage() throws Exception {
-
     }
 
     @Test
