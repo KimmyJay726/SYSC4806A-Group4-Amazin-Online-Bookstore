@@ -3,8 +3,7 @@ package org.example;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +16,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.thymeleaf.spring6.expression.Mvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -193,5 +193,91 @@ public class MockMVCTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("The Hobbit")))
                 .andExpect(content().string(containsString("Tolkien")));
+    }
+
+    @Test
+    public void editBookPage() throws Exception {
+        //Test not logged in
+        mockMvc.perform(multipart("/books/1/editBook")
+                        .param("bookISBN", "xyz")
+                        .with(request -> { request.setMethod("POST"); return request; }))
+                .andExpect(status().isUnauthorized());
+
+        //Test user is not owner
+        //Login as normal user
+        MvcResult loginResult = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"andrew\", \"password\":\"password2\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession();
+
+        mockMvc.perform(multipart("/books/1/editBook")
+                        .session(session)
+                        .param("bookISBN", "test")
+                        .with(request -> { request.setMethod("POST"); return request; }))
+                .andExpect(status().isUnauthorized());
+
+        //Login as admin
+        loginResult = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"admin\", \"password\":\"admin\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+        session = (MockHttpSession) loginResult.getRequest().getSession();
+
+        //Test book not found
+        mockMvc.perform(multipart("/books/999/editBook")
+                        .session(session)
+                        .param("bookISBN", "test")
+                        .with(request -> { request.setMethod("POST"); return request; }))
+                .andExpect(status().isNotFound());
+
+        //Test book editing non picture fields
+        mockMvc.perform(multipart("/books/1/editBook")
+                        .session(session)
+                        .param("bookISBN", "129391")
+                        .param("bookTitle", "The Hobbit")
+                        .param("bookAuthor", "J.R.R. Tolkien")
+                        .param("bookPublisher", "HarperCollins")
+                        .param("bookPrice", "19.99")
+                        .param("numBooks", "7")
+                        .param("bookDescription", "Smth")
+                        .with(request -> { request.setMethod("POST"); return request; }))
+                .andExpect(status().isOk());
+
+        //Set up multipart file
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "bookPicture",
+                "cover.jpg",
+                "image/jpeg",
+                "fakeimage".getBytes()
+        );
+
+        //Test with file uploads
+        mockMvc.perform(multipart("/books/1/editBook")
+                        .file(imageFile)
+                        .session(session)
+                        .param("bookISBN", "129391")
+                        .param("bookTitle", "The Hobbit")
+                        .param("bookAuthor", "J.R.R. Tolkien")
+                        .param("bookPublisher", "HarperCollins")
+                        .param("bookPrice", "19.99")
+                        .param("numBooks", "7")
+                        .param("bookDescription", "Smth")
+                        .with(request -> { request.setMethod("POST"); return request; }))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.bookPicture").value("/uploads/cover.jpg"));
+    }
+
+    @Test
+    public void recommendationPage() throws Exception {
+
+    }
+
+    @Test
+    public void checkoutPage() throws Exception {
+
     }
 }
