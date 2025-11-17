@@ -16,6 +16,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MockMVCTests {
@@ -77,56 +80,16 @@ public class MockMVCTests {
         this.mockMvc.perform(get("/inventory"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("ID")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("ISBN")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Title")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Picture")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Author")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Publisher")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Price")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Quantity")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Description")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Action")));
-
-        this.mockMvc.perform(get("/inventory"))
-                .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("ID")))
+                .andExpect(content().string(containsString("ISBN")))
+                .andExpect(content().string(containsString("Title")))
+                .andExpect(content().string(containsString("Picture")))
+                .andExpect(content().string(containsString("Author")))
+                .andExpect(content().string(containsString("Publisher")))
+                .andExpect(content().string(containsString("Price")))
+                .andExpect(content().string(containsString("Quantity")))
+                .andExpect(content().string(containsString("Description")))
+                .andExpect(content().string(containsString("Action")))
                 .andExpect(content().string(containsString("Search")));
 
         //Login as admin
@@ -143,6 +106,12 @@ public class MockMVCTests {
                         .session(session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(">Edit</button>")));
+
+        //Check for the add book button at the top
+        mockMvc.perform(get("/inventory")
+                    .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("class=\"add-book-button\"")));
     }
 
     @Test
@@ -301,6 +270,31 @@ public class MockMVCTests {
 
     @Test
     public void checkoutPage() throws Exception {
+        //Login as normal user
+        MvcResult loginResult = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"andrew\", \"password\":\"password2\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
 
+        MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession();
+
+        mockMvc.perform(get("/checkout").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("checkout"))
+                .andExpect(content().string(containsString("Finalize Your Order")))
+                .andExpect(content().string(containsString("Shipping Information")))
+                .andExpect(content().string(containsString("Payment Information")));
+
+        //Test sidebar
+        mockMvc.perform(get("/checkout").session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Your cart is empty.")));
+
+        mockMvc.perform(get("/checkout").session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Subtotal:")))
+                .andExpect(content().string(containsString("Shipping:")))
+                .andExpect(content().string(containsString("Order Total:")));
     }
 }
