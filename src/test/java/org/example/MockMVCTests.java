@@ -1,0 +1,197 @@
+package org.example;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
+
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class MockMVCTests {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    public void homePage() throws Exception {
+        this.mockMvc.perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Welcome to the Amazin Online Bookstore Nexus!")))
+                .andExpect(content().string(containsString("BROWSE CATALOG")));
+    }
+
+    @Test
+    public void loginPage() throws Exception {
+        this.mockMvc.perform(get("/login-register"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("id=\"loginUsername\"")))
+                .andExpect(content().string(containsString("id=\"loginPassword\"")));
+    }
+
+    @Test
+    public void browsePage() throws Exception{
+        //Check that the client options are there
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("ID")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("ISBN")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Title")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Picture")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Author")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Publisher")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Price")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Quantity")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Description")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Action")));
+
+        this.mockMvc.perform(get("/inventory"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Search")));
+
+        //Login as admin
+        MvcResult loginAttempt = mockMvc.perform(post("/client/login")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"username\": \"admin\", \"password\": \"admin\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MockHttpSession session = (MockHttpSession) loginAttempt.getRequest().getSession();
+
+        //Check that the edit button exists
+        mockMvc.perform(get("/inventory")
+                        .session(session))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(">Edit</button>")));
+    }
+
+    @Test
+    public void addBookPage() throws Exception {
+        //Test Unauthorized Access
+        mockMvc.perform(multipart("/books/addBook")
+                        .param("bookTitle", "Test Book")
+                        .param("bookISBN", "123456789")
+                        .param("bookDescription", "A test book")
+                        .param("bookAuthor", "Author")
+                        .param("bookPublisher", "Publisher")
+                        .param("bookPrice", "10.99")
+                        .param("numBooks", "5"))
+                .andExpect(status().isUnauthorized());
+
+        //Login as a normal user
+        MvcResult loginResult = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"andrew\", \"password\":\"password2\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MockHttpSession session = (MockHttpSession) loginResult.getRequest().getSession();
+
+        mockMvc.perform(multipart("/books/addBook")
+                        .session(session)
+                        .param("bookTitle", "Test Book")
+                        .param("bookISBN", "111111")
+                        .param("bookDescription", "Test Desc")
+                        .param("bookAuthor", "Test Author")
+                        .param("bookPublisher", "Test Publisher")
+                        .param("bookPrice", "9.99")
+                        .param("numBooks", "3"))
+                .andExpect(status().isUnauthorized());
+
+        //Test Authorized Access
+        //Login as admin
+        loginResult = mockMvc.perform(post("/client/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"admin\", \"password\":\"admin\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        session = (MockHttpSession) loginResult.getRequest().getSession();
+
+        //Test no file upload
+        mockMvc.perform(multipart("/books/addBook")
+                        .session(session)
+                        .param("bookTitle", "Test Book")
+                        .param("bookISBN", "111111")
+                        .param("bookDescription", "Test Desc")
+                        .param("bookAuthor", "Test Author")
+                        .param("bookPublisher", "Test Publisher")
+                        .param("bookPrice", "9.99")
+                        .param("numBooks", "3"))
+                .andExpect(status().isOk());
+
+        //Test file upload
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file",
+                "cover.jpg",
+                "image/jpeg",
+                "fakeimage".getBytes()
+        );
+
+        mockMvc.perform(multipart("/books/addBook")
+                        .file(mockFile)
+                        .session(session)
+                        .param("bookTitle", "The Hobbit")
+                        .param("bookISBN", "9780547928227")
+                        .param("bookDescription", "Adventure novel")
+                        .param("bookAuthor", "J.R.R. Tolkien")
+                        .param("bookPublisher", "HarperCollins")
+                        .param("bookPrice", "19.99")
+                        .param("numBooks", "7"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("The Hobbit")))
+                .andExpect(content().string(containsString("Tolkien")));
+    }
+}
