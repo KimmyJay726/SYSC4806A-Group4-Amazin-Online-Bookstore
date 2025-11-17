@@ -81,7 +81,11 @@ This schema is derived directly from the UML diagram.
 
 ### Link to deployed site (on Azure):
 
-- https://amazin-online-bookstore-group4.azurewebsites.net/ 
+- https://amazin-online-bookstore-group4.azurewebsites.net/
+
+### Link to the logging (on Azure):
+
+- https://amazingbookstore.grafana.net/
 
 ### Link to the Loki server:
 - http://loki:3100
