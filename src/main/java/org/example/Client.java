@@ -137,4 +137,17 @@ public class Client {
         }
     }
 
+    /**
+     * Returns how many of a certain item appear in the client's cart
+     */
+    public int countItemInShoppingCart(long bookId) {
+        int count = 0;
+        for (long itemId: shoppingCartIds) {
+            if (itemId == bookId) {
+                count++;
+            }
+        }
+        return count;
+    }
+
 }
