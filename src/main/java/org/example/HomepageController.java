@@ -215,7 +215,7 @@ public class HomepageController {
                 client.addToPurchasedBooks(bookId);
 
                 // Decrement the number of copies of the book in the inventory by 1
-                purchasedBook.setNumBooksAvailableForPurchase(numAvailableCopies);
+                purchasedBook.setNumBooksAvailableForPurchase(numAvailableCopies - 1);
                 bookRepository.save(purchasedBook);
             }
 
