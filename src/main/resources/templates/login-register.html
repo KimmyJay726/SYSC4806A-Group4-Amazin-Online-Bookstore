@@ -8,27 +8,38 @@
 </head>
 <body>
 
-<div class="container">
-    <!-- Login Form -->
-    <form id="loginForm">
-        <h2>Login</h2>
-        <input type="text" id="loginUsername" placeholder="Username" required />
-        <input type="password" id="loginPassword" placeholder="Password" required />
-        <button class="submit-btn" type="submit">Login</button>
-        <button class="toggle-btn" type="button" id="showSignup">Don’t have an account? Sign up!</button>
-        <div id="loginMessage" class="error hidden"></div>
-    </form>
+<header class="top-bar">
+    <div class="site-identity">
+        <div class="site-icon"> 📚 </div>
+        <div class="site-name">
+            <a href="/" style="text-decoration: none; color: inherit;">Amazin Online Bookstore</a>
+        </div>
+    </div>
+</header>
 
-    <!-- Signup Form -->
-    <form id="signupForm" class="hidden">
-        <h2>Sign Up</h2>
-        <input type="text" id="signupUsername" placeholder="Choose a username" required />
-        <input type="password" id="signupPassword" placeholder="Choose a password" required />
-        <button class="submit-btn" type="submit">Register</button>
-        <button class="toggle-btn" type="button" id="showLogin">Already have an account? Log in!</button>
-        <div id="signupMessage" class="error hidden"></div>
-    </form>
+<div class="main-content">
+    <div class="container">
+        <!-- Login Form -->
+        <form id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username" required />
+            <input type="password" id="loginPassword" placeholder="Password" required />
+            <button class="submit-btn" type="submit">Login</button>
+            <button class="toggle-btn" type="button" id="showSignup">Don’t have an account? Sign up!</button>
+            <div id="loginMessage" class="error hidden"></div>
+        </form>
 
+        <!-- Signup Form -->
+        <form id="signupForm" class="hidden">
+            <h2>Sign Up</h2>
+            <input type="text" id="signupUsername" placeholder="Choose a username" required />
+            <input type="password" id="signupPassword" placeholder="Choose a password" required />
+            <button class="submit-btn" type="submit">Register</button>
+            <button class="toggle-btn" type="button" id="showLogin">Already have an account? Log in!</button>
+            <div id="signupMessage" class="error hidden"></div>
+        </form>
+
+    </div>
 </div>
 
 <!-- jQuery library -->

@@ -139,4 +139,21 @@ public class ClientTest {
         Assertions.assertEquals(1, client.getPurchasedBooks().size());
         Assertions.assertTrue(client.getPurchasedBooks().contains(book1.getId()));
     }
+
+    @Test
+    void testCountItemInShoppingCart(){
+        // Add some books to the client's shopping cart
+        client.addToShoppingCart(1);
+        client.addToShoppingCart(1);
+        client.addToShoppingCart(2);
+        client.addToShoppingCart(3);
+        client.addToShoppingCart(2);
+        client.addToShoppingCart(1);
+
+        Assertions.assertEquals(6, client.getShoppingCart().size());
+        Assertions.assertEquals(3, client.countItemInShoppingCart(1));
+        Assertions.assertEquals(2, client.countItemInShoppingCart(2));
+        Assertions.assertEquals(1, client.countItemInShoppingCart(3));
+        Assertions.assertEquals(0, client.countItemInShoppingCart(4));
+    }
 }

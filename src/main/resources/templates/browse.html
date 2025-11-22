@@ -97,9 +97,26 @@
             <td th:text="${book.bookDescription}"></td>
             <td>
                 <div th:if="${client != null and not client.isOwner}">
-                    <button th:if="${book.numBooksAvailableForPurchase > 0}" type="button" class="action-button" id="addToCart" th:onclick="'addBookToCart(' + ${book.id} + ')'">Add</button><br>
-                    <button th:if="${client.getShoppingCart().contains(book.id)}" type="button" class="action-button" id="removeFromCart" th:onclick="'removeBookFromCart(' + ${book.id} + ')'">Remove</button>
+                    <button
+                            th:id="'addToCart-' + ${book.id}"
+                            th:style="${book.numBooksAvailableForPurchase > 0
+                   and client.countItemInShoppingCart(book.id) < book.numBooksAvailableForPurchase} ? '' : 'display:none;'"
+                            type="button"
+                            class="action-button"
+                            th:onclick="'addBookToCart(' + ${book.id} + ', ' + ${book.numBooksAvailableForPurchase} + ')'">
+                        Add
+                    </button>
+
+                    <button
+                            th:id="'removeFromCart-' + ${book.id}"
+                            th:style="${client.countItemInShoppingCart(book.id) > 0} ? '' : 'display:none;'"
+                            type="button"
+                            class="action-button"
+                            th:onclick="'removeBookFromCart(' + ${book.id} + ', ' + ${book.numBooksAvailableForPurchase} + ')'">
+                        Remove
+                    </button>
                 </div>
+
                 <div th:if="${client != null and client.isOwner}">
                     <button type="button" class="action-button" id="editBook" th:onclick="'editBook(' + ${book.id} + ')'">Edit</button>
                 </div>
