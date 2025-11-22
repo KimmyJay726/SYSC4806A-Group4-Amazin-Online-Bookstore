@@ -191,7 +191,12 @@ public class BookController {
 
         //Check if client is owner
         Client client = (Client) session.getAttribute("loggedInClient");
-        if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
+        if(client == null) {
+            logger.error("ERROR: User is not signed in.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (!Boolean.TRUE.equals(client.getIsOwner())) {
             logger.error("ERROR: User {} is not the owner.", client.getUsername());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

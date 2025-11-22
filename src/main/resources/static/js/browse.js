@@ -65,20 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     }
 
-    window.addBookToCart = function(bookId) {
-        // Decrement stock for the book
-        fetch(`/books/${bookId}/purchaseBook`, {
+    window.addBookToCart = function(bookId, maxBooks) {
+        fetch(`/client/cart/add/${bookId}`, {
             method: 'POST'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Book not found");
-            }
-            return response.json();
-        })
-        .then(book => {
-            // Add the book to the client's shopping cart
-            return fetch(`/client/cart/add/${book.id}`, { method: 'POST' });
         })
         .then(response => {
             if (!response.ok){
@@ -86,42 +75,60 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             return response.json();
         })
-        .then(updatedClient => {
-            console.log("Updated shopping cart:", updatedClient.shoppingCart);
-            window.location.reload();
+        .then(() => {
+            console.log("Added " + bookId + " to your shopping cart");
+            refreshButtonsForBook(bookId, maxBooks);
         })
         .catch(err => {
             alert(err.message);
         });
     };
 
-    window.removeBookFromCart = function(bookId) {
-        // Increment stock for the book
-        fetch(`/books/${bookId}/returnBook`, {
-            method: 'POST'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error increasing stock for bookId" + bookId);
-            }
-            return response.json();
-        })
-        .then(book => {
-            // Remove the book from the client's shopping cart
-            return fetch(`/client/cart/remove/${book.id}`, { method: 'POST' });
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error removing " + bookId + " from your cart");
-            }
-            return response.json();
-        })
-        .then(updatedClient => {
-            console.log("Updated shopping cart:", updatedClient.shoppingCart);
-            window.location.reload();
-        })
-        .catch(err => {
-            alert(err.message);
-        });
+    window.removeBookFromCart = function(bookId, maxBooks) {
+        fetch(`/client/cart/remove/${bookId}`, { method: 'POST' })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error removing " + bookId + " from your cart");
+                }
+                return response.json();
+            })
+            .then(() => {
+                console.log("Removed " + bookId + " from your shopping cart");
+                refreshButtonsForBook(bookId, maxBooks);
+            })
+            .catch(err => alert(err.message));
     };
+
+    // Helper function to show or hide the Add and Remove buttons for a book
+    function refreshButtonsForBook(bookId, maxBooks) {
+        fetch(`/client/me`)
+            .then(response => response.json())  // parse the JSON response
+            .then(client => {
+                // Get the number of copies the client owns
+                const clientCopies = countCopies(client.shoppingCart, bookId);
+
+                // Show or hide Add button
+                const addBtn = document.getElementById(`addToCart-${bookId}`);
+                addBtn.style.visibility = (clientCopies < maxBooks) ? "visible" : "hidden";
+
+                // Show or hide Remove button
+                const removeBtn = document.getElementById(`removeFromCart-${bookId}`);
+                removeBtn.style.visibility = (clientCopies > 0) ? "visible" : "hidden";
+
+                // Reload page to ensure visibility changes are applied by the browser
+                window.location.reload();
+            })
+            .catch(err => console.error("Error refreshing buttons:", err));
+    }
+
+    // Helper function to count the number of books with the same id
+    function countCopies(cart, bookId) {
+        let count = 0;
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i] === bookId) {
+                count++;
+            }
+        }
+        return count;
+    }
 });

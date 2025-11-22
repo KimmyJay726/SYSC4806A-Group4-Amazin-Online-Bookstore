@@ -1,14 +1,19 @@
-/* General Page Styles */
+/* General Page Style */
 body {
     margin: 0;
     font-family: sans-serif;
     background-color: #f4f4f9;
+}
+
+/* Page Excluding Header */
+.main-content {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: calc(100vh - 60px);
 }
 
+/* Outline of Form */
 .container {
     background: white;
     padding: 2rem;
@@ -16,6 +21,37 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 320px;
     text-align: center;
+}
+
+/* Top Bar Component */
+.top-bar {
+    background-color: #333;
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon Location Component */
+.site-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icon Component */
+.site-icon {
+    font-size: 1.5em;
+    color: #FFEB3B;
+}
+
+/* Site Name Component in Top Bar*/
+.site-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4CAF50;
 }
 
 /* Headings */

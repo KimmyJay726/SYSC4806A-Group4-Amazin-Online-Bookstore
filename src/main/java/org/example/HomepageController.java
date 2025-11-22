@@ -117,7 +117,15 @@ public class HomepageController {
     }
 
     @GetMapping("/inventory/edit")
-    public String editBook(@RequestParam Integer id, Model model) {
+    public String editBook(@RequestParam Integer id, Model model, HttpSession session) {
+        Client client = (Client) session.getAttribute("loggedInClient");
+
+        // Check if user is logged in and is an owner
+        if (client == null || !Boolean.TRUE.equals(client.getIsOwner())) {
+            // Redirect to login page if not logged in or not an owner
+            return "redirect:/login-register?error=unauthorized";
+        }
+
         Optional<Book> bookOpt = bookRepository.findById(id);
         if (bookOpt.isPresent()) {
             model.addAttribute("book", bookOpt.get());
