@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    let allBooks = []; 
+    let allBooks = [];
+    let clientData = null;
+
+    //Get Client information
+    fetch('/client/me')
+        .then(r => r.json())
+        .then(data => clientData = data)
+        .catch(() => clientData = null);
     
     fetch('/books/all')
         .then(response => response.json())
@@ -36,6 +43,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         
         data.forEach(book => {
+            //Check client information
+            const clientIsLoggedIn = clientData !== null;
+            const clientIsOwner = clientIsLoggedIn && clientData.isOwner;
+            const clientCopies = clientIsLoggedIn ? countCopies(clientData.shoppingCart, book.id) : 0;
+
+            //Button Logic
+            const canAdd = clientIsLoggedIn && !clientIsOwner && clientCopies < book.numBooksAvailableForPurchase;
+            const canRemove = clientIsLoggedIn && !clientIsOwner && clientCopies > 0;
+
+            let actionButtons = "";
+
+            //User Buttons
+            if (clientIsLoggedIn && !clientIsOwner) {
+                actionButtons = `
+                <button id="addToCart-${book.id}"
+                        style="${canAdd ? '' : 'display:none;'}"
+                        class="action-button"
+                        onclick="addBookToCart(${book.id}, ${book.numBooksAvailableForPurchase})">
+                    Add
+                </button>
+
+                <button id="removeFromCart-${book.id}"
+                        style="${canRemove ? '' : 'display:none;'}"
+                        class="action-button"
+                        onclick="removeBookFromCart(${book.id}, ${book.numBooksAvailableForPurchase})">
+                    Remove
+                </button>`;
+            }
+
+            //Owner Buttons
+            if (clientIsLoggedIn && clientIsOwner) {
+                actionButtons = `
+                <button class="action-button"
+                        onclick="editBook(${book.id})">
+                    Edit
+                </button>`;
+            }
+
+            //Update entire row with new result
             const row = `
             <tr>
                 <td>${book.id}</td>
@@ -49,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>$${book.bookPrice ? book.bookPrice.toFixed(2) : '0.00'}</td>
                 <td>${book.numBooksAvailableForPurchase}</td>
                 <td>${book.bookDescription}</td>
+                <td>${actionButtons}</td>
                 <td></td>
             </tr>`;
             tableBody.innerHTML += row;
