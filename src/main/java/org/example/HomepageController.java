@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -153,8 +154,6 @@ public class HomepageController {
         Client refreshedClient = refreshedClientOpt.get();
         List<Long> cartBookIds = refreshedClient.getShoppingCart();
 
-        session.setAttribute("loggedInClient", refreshedClient);
-
         List<Book> cartItems = new ArrayList<>();
         double subtotal = 0.0;
 
@@ -207,7 +206,20 @@ public class HomepageController {
 
         if (paymentSuccessful) {
 
-            //Clear the cart on the Client object (requires the clearShoppingCart() method in Client.java)
+            for (Long bookId : client.getShoppingCart()) {
+
+                Integer numAvailableCopies = bookRepository.findById(bookId).getNumBooksAvailableForPurchase();
+                Book purchasedBook = bookRepository.findById(bookId);
+
+                // Add the ID of the copy of the book to the client's purchasedBookIds
+                client.addToPurchasedBooks(bookId);
+
+                // Decrement the number of copies of the book in the inventory by 1
+                purchasedBook.setNumBooksAvailableForPurchase(numAvailableCopies - 1);
+                bookRepository.save(purchasedBook);
+            }
+
+            // Clear the cart on the Client object (requires the clearShoppingCart() method in Client.java)
             client.clearShoppingCart();
 
             // Save the updated Client object (with the empty cart) to the database
