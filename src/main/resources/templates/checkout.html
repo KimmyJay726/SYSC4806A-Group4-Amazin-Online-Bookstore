@@ -112,7 +112,7 @@
         </button>
     </div>
 
-    <div class="sidebar empty-cart" th:if="${#lists.isEmpty(cartItems)}">
+    <div class="sidebar empty-cart" th:if="${#lists.isEmpty(cartItems) and param.success == null}">
         <h2>🛒 Your Cart is Empty</h2>
         <p>Please add books to your cart to complete your order.</p>
         <p class="error-message"><a href="/inventory">Browse the Bookstore</a></p>
