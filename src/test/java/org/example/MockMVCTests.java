@@ -286,8 +286,13 @@ public class MockMVCTests {
         //Test sidebar
         mockMvc.perform(get("/checkout").session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Your cart is empty.")));
+                .andExpect(content().string(containsString("Your Cart is Empty")));
 
+        //Add a book to the cart
+        mockMvc.perform(post("/client/cart/add/{bookId}", 1).session(session))
+                .andExpect(status().isOk());
+
+        //Info should show after adding book.
         mockMvc.perform(get("/checkout").session(session))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Subtotal:")))
