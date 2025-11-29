@@ -6,6 +6,7 @@
     <title>Checkout - Bookstore</title>
 
     <link rel="stylesheet" th:href="@{/css/checkout.css}">
+    <link rel="icon" href="/favicon.ico">
 </head>
 <body>
 
@@ -64,17 +65,18 @@
         </form>
     </div>
 
-    <div class="sidebar" th:unless="${param.success}">
+
+    <div class="sidebar" th:if="${!#lists.isEmpty(cartItems) and param.success == null}" >
         <h2>🛍️ Your Order</h2>
 
         <div id="cart-items-list">
             <div class="cart-item" th:each="item : ${cartItems}">
                 <div class="cart-item-details">
-                    <h4 th:text="${item.bookTitle}">Book Title Placeholder</h4>
-                    <small>Qty: 1</small>
+                    <h4 th:text="${item.book.bookTitle}">Book Title Placeholder</h4>
+                    <small th:text="'Qty: ' + ${item.quantity}">Qty: 1</small>
                 </div>
                 <div class="cart-item-price"
-                     th:text="'$' + ${#numbers.formatDecimal(item.bookPrice, 0, 2)}">
+                     th:text="'$' + ${#numbers.formatDecimal(item.lineTotal, 0, 2)}">
                     $0.00
                 </div>
             </div>
@@ -105,13 +107,21 @@
             <span id="order-total" th:text="'$' + ${#numbers.formatDecimal(orderTotal, 0, 2)}">$0.00</span>
         </div>
 
-        <button type="submit" class="place-order-btn" form="checkoutForm">
+        <button type="submit" class="place-order-btn" form="checkoutForm" th:disabled="${#lists.isEmpty(cartItems)}">
             Place Order & Pay <span id="button-total" th:text="'$' + ${#numbers.formatDecimal(orderTotal, 0, 2)}">$0.00</span>
         </button>
     </div>
+
+    <div class="sidebar empty-cart" th:if="${#lists.isEmpty(cartItems) and param.success == null}">
+        <h2>🛒 Your Cart is Empty</h2>
+        <p>Please add books to your cart to complete your order.</p>
+        <p class="error-message"><a href="/inventory">Browse the Bookstore</a></p>
+    </div>
+
 
 </div>
 
 <script th:src="@{/checkout.js}"></script>
 </body>
 </html>
+

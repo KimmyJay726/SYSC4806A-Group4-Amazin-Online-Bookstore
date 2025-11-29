@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class HomepageController {
@@ -143,6 +140,8 @@ public class HomepageController {
         }
     }
 
+
+
     @GetMapping("/checkout")
     public String viewCheckout(HttpSession session, Model model) {
 
@@ -152,7 +151,7 @@ public class HomepageController {
             return "redirect:/login-register";
         }
 
-
+        // Use Long for findById
         Optional<Client> refreshedClientOpt = clientRepository.findById((int) client.getId());
         if (refreshedClientOpt.isEmpty()) {
             return "redirect:/login-register";
@@ -161,29 +160,40 @@ public class HomepageController {
         Client refreshedClient = refreshedClientOpt.get();
         List<Long> cartBookIds = refreshedClient.getShoppingCart();
 
-        List<Book> cartItems = new ArrayList<>();
+        // 1. Count occurrences of each book ID
+        Map<Long, Integer> bookIdCounts = new HashMap<>();
+        for (Long bookId : cartBookIds) {
+            bookIdCounts.put(bookId, bookIdCounts.getOrDefault(bookId, 0) + 1);
+        }
+
+        // 2. Create list of CartItemView DTOs
+        List<CartItemView> cartItemsView = new ArrayList<>();
         double subtotal = 0.0;
 
-        for (Long bookId : cartBookIds) {
+        for (Map.Entry<Long, Integer> entry : bookIdCounts.entrySet()) {
+            Long bookId = entry.getKey();
+            int quantity = entry.getValue();
 
-            Integer bookIdInt = bookId.intValue();
-
-            Optional<Book> bookOpt = bookRepository.findById(bookIdInt); // Use the Integer ID
+            // Use Long for findById
+            Optional<Book> bookOpt = Optional.ofNullable(bookRepository.findById(bookId));
 
             if (bookOpt.isPresent()) {
                 Book book = bookOpt.get();
-                cartItems.add(book);
-                subtotal += book.getBookPrice();
+                CartItemView cartItem = new CartItemView(book, quantity);
+                cartItemsView.add(cartItem);
+                subtotal += cartItem.getLineTotal();
             }
         }
+        // === END: Grouping Logic ===
 
-        final double SHIPPING_COST = 5.00;
+        final double SHIPPING_COST = subtotal > 0 ? 5.00 : 0.00; // Only charge shipping if there are items
         final double TAX_RATE = 0.07;
 
         double tax = subtotal * TAX_RATE;
         double total = subtotal + tax + SHIPPING_COST;
 
-        model.addAttribute("cartItems", cartItems);
+        // Pass the grouped list to the model
+        model.addAttribute("cartItems", cartItemsView);
         model.addAttribute("subtotal", subtotal);
         model.addAttribute("shippingCost", SHIPPING_COST);
         model.addAttribute("tax", tax);
