@@ -108,7 +108,7 @@ public class MockMVCTests {
         mockMvc.perform(get("/inventory")
                     .session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("class=\"add-book-button\"")));
+                .andExpect(content().string(containsString("class=\"floating-add-button\"")));
     }
 
     @Test
