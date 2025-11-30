@@ -34,6 +34,11 @@
         <p>You can now <a href="/">return to the homepage</a>.</p>
     </div>
 
+    <div th:if="${param.error}" class="payment-feedback error">
+        <h2>❌ Order Processing Failed</h2>
+        <p th:text="${param.error}"></p>
+    </div>
+
     <div class="main-content" th:unless="${param.success}">
         <form id="checkoutForm" action="/checkout" method="POST">
 
@@ -45,11 +50,18 @@
                 </div>
             </div>
 
-            <div class="form-section payment-info">
+            <div th:if="${!#lists.isEmpty(cartItems)}" class="form-section payment-info">
                 <h2>2. Payment Information</h2>
                 <div class="form-group">
                     <label for="cardNumber">Credit Card Number</label>
-                    <input type="text" id="cardNumber" name="cardNumber"  maxlength="16" placeholder="16-digit card number" required>
+                    <input type="text"
+                           id="cardNumber"
+                           name="cardNumber"
+                           maxlength="16"
+                           pattern="\d{16}"
+                           inputmode="numeric"
+                           placeholder="16-digit card number (e.g., 1111222233334444)"
+                           required>
                 </div>
                 <div class="expiration-cvv">
                     <div class="form-group expiry-group">
