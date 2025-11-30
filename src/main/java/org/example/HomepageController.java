@@ -17,6 +17,12 @@ import java.util.*;
 @Controller
 public class HomepageController {
 
+    private static final List<String> VALID_TEST_CARDS = Arrays.asList(
+            "1111222233334444",
+            "5555666677778888",
+            "0000111100001111"
+    );
+
     @Autowired
     private Jaccard jaccard;
 
@@ -219,7 +225,9 @@ public class HomepageController {
 
         //SIMULATE PAYMENT PROCESSING
 
-        boolean paymentSuccessful = true;
+        String cleanedCardNumber = cardNumber.replaceAll("\\s", "");
+        boolean paymentSuccessful = VALID_TEST_CARDS.contains(cleanedCardNumber);
+
 
         if (paymentSuccessful) {
 
