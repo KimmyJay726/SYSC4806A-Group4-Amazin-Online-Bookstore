@@ -15,11 +15,7 @@
             <a href="/" style="text-decoration: none; color: inherit;">Amazin Online Bookstore</a>
         </div>
     </div>
-    <div class="navbar-actions">
-        <a th:if="${client != null and client.isOwner == true}" href="/addBook" class="add-book-button">
-            Add Book
-        </a>
-    </div>
+
     <div class="user-info-group">
         <div class="logged-in-as">
             Logged in as: <span id="usernameDisplay" th:text="${username}">Guest User</span>
@@ -129,6 +125,11 @@
 <div th:if="${books.size() == 0}">
     <p>No books available in inventory.</p>
 </div>
+
+<!-- Floating Add Book Button -->
+<a th:if="${client != null and client.isOwner == true}" href="/addBook" class="floating-add-button" title="Add Book">
+    +
+</a>
 
 <!-- jQuery library -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
