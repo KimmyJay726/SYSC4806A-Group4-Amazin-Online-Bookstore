@@ -17,11 +17,19 @@ import java.util.*;
 @Controller
 public class HomepageController {
 
-    private static final List<String> VALID_TEST_CARDS = Arrays.asList(
-            "1111222233334444",
-            "5555666677778888",
-            "0000111100001111"
-    );
+    private static final Map<String, List<String>> VALID_TEST_CARDS;
+
+    static {
+        Map<String, List<String>> aMap = new HashMap<>();
+
+        aMap.put("1111222233334444", Arrays.asList("12/26", "444"));
+
+        aMap.put("5555666677778888", Arrays.asList("08/27", "888"));
+
+        aMap.put("0000111100001111", Arrays.asList("06/28", "111"));
+
+        VALID_TEST_CARDS = Collections.unmodifiableMap(aMap);
+    }
 
     @Autowired
     private Jaccard jaccard;
@@ -212,8 +220,10 @@ public class HomepageController {
     @PostMapping("/checkout")
     public String processCheckout(
             @RequestParam String fullName,
-            @RequestParam String cardNumber, // Captures the credit card number from the form
-            // Add other form fields here: @RequestParam String expiry, @RequestParam String cvv,
+            @RequestParam String cardNumber,
+            @RequestParam String expiry,
+            @RequestParam String cvv,
+
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -226,8 +236,18 @@ public class HomepageController {
         //SIMULATE PAYMENT PROCESSING
 
         String cleanedCardNumber = cardNumber.replaceAll("\\s", "");
-        boolean paymentSuccessful = VALID_TEST_CARDS.contains(cleanedCardNumber);
+        boolean paymentSuccessful = VALID_TEST_CARDS.containsKey(cleanedCardNumber);
 
+        if (paymentSuccessful) {
+            List<String> cardDetails = VALID_TEST_CARDS.get(cleanedCardNumber);
+            String validExpiry = cardDetails.get(0);
+            String validCvv = cardDetails.get(1);
+
+            // If the expiry or CVV do not match the expected test values, fail the payment.
+            if (!validExpiry.equals(expiry) || !validCvv.equals(cvv)) {
+                paymentSuccessful = false;
+            }
+        }
 
         if (paymentSuccessful) {
 
