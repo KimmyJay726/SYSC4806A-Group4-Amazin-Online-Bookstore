@@ -41,7 +41,7 @@
                 <h2>1. Shipping Information</h2>
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" name="fullName" required>
+                    <input type="text" id="fullName" name="fullName" th:value="${fullName}" required>
                 </div>
             </div>
 
@@ -56,23 +56,24 @@
                            pattern="\d{16}"
                            inputmode="numeric"
                            placeholder="16-digit card number (e.g., 1111222233334444)"
+                           th:value="${cardNumber}"
                            required>
                 </div>
                 <div class="expiration-cvv">
                     <div class="form-group expiry-group">
                         <label for="expiry">Expiry (MM/YY)</label>
-                        <input type="text" id="expiry" name="expiry" maxlength="5" placeholder="MM/YY (12/26)" required>
+                        <input type="text" id="expiry" name="expiry" maxlength="5" placeholder="MM/YY (12/26)" th:value="${expiry}" required>
                     </div>
                     <div class="form-group cvv-group">
                         <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" name="cvv" maxlength="4" placeholder="(444)" required>
+                        <input type="text" id="cvv" name="cvv" maxlength="4" placeholder="(444)" th:value="${cvv}" required>
                     </div>
                 </div>
             </div>
 
-            <div th:if="${param.error}" class="payment-feedback error">
+            <div th:if="${error}" class="payment-feedback error">
                 <h2>❌ Order Processing Failed</h2>
-                <p th:text="${param.error}"></p>
+                <p th:text="${error}"></p>
             </div>
 
         </form>

@@ -76,17 +76,13 @@ public class HomepageController {
         //TODO make it cross-check each filter.
         if (isbn != null && !isbn.isEmpty()) {
             books = bookRepository.findByBookISBN(isbn);
-        }
-        else if (title != null && !title.isEmpty()) {
+        } else if (title != null && !title.isEmpty()) {
             books = bookRepository.findByBookTitle(title);
-        }
-        else if (author != null && !author.isEmpty()) {
+        } else if (author != null && !author.isEmpty()) {
             books = bookRepository.findByBookAuthor(author);
-        }
-        else if (publisher != null && !publisher.isEmpty()) {
+        } else if (publisher != null && !publisher.isEmpty()) {
             books = bookRepository.findByBookPublisher(publisher);
-        }
-        else {
+        } else {
             books = (List<Book>) bookRepository.findAll();
         }
 
@@ -124,9 +120,7 @@ public class HomepageController {
                 recommendedBooks.add(bookRepository.findById(bookId));
             }
             model.addAttribute("books", recommendedBooks);
-        }
-
-        else {
+        } else {
             List<Book> recommendedBooks = (List<Book>) bookRepository.findAll();
             model.addAttribute("books", recommendedBooks);
         }
@@ -154,69 +148,6 @@ public class HomepageController {
         }
     }
 
-
-
-    @GetMapping("/checkout")
-    public String viewCheckout(HttpSession session, Model model) {
-
-        Client client = (Client) session.getAttribute("loggedInClient");
-
-        if (client == null) {
-            return "redirect:/login-register";
-        }
-
-        // Use Long for findById
-        Optional<Client> refreshedClientOpt = clientRepository.findById((int) client.getId());
-        if (refreshedClientOpt.isEmpty()) {
-            return "redirect:/login-register";
-        }
-
-        Client refreshedClient = refreshedClientOpt.get();
-        List<Long> cartBookIds = refreshedClient.getShoppingCart();
-
-        // 1. Count occurrences of each book ID
-        Map<Long, Integer> bookIdCounts = new HashMap<>();
-        for (Long bookId : cartBookIds) {
-            bookIdCounts.put(bookId, bookIdCounts.getOrDefault(bookId, 0) + 1);
-        }
-
-        // 2. Create list of CartItemView DTOs
-        List<CartItemView> cartItemsView = new ArrayList<>();
-        double subtotal = 0.0;
-
-        for (Map.Entry<Long, Integer> entry : bookIdCounts.entrySet()) {
-            Long bookId = entry.getKey();
-            int quantity = entry.getValue();
-
-            // Use Long for findById
-            Optional<Book> bookOpt = Optional.ofNullable(bookRepository.findById(bookId));
-
-            if (bookOpt.isPresent()) {
-                Book book = bookOpt.get();
-                CartItemView cartItem = new CartItemView(book, quantity);
-                cartItemsView.add(cartItem);
-                subtotal += cartItem.getLineTotal();
-            }
-        }
-        // === END: Grouping Logic ===
-
-        final double SHIPPING_COST = subtotal > 0 ? 5.00 : 0.00; // Only charge shipping if there are items
-        final double TAX_RATE = 0.07;
-
-        double tax = subtotal * TAX_RATE;
-        double total = subtotal + tax + SHIPPING_COST;
-
-        // Pass the grouped list to the model
-        model.addAttribute("cartItems", cartItemsView);
-        model.addAttribute("subtotal", subtotal);
-        model.addAttribute("shippingCost", SHIPPING_COST);
-        model.addAttribute("tax", tax);
-        model.addAttribute("orderTotal", total);
-        model.addAttribute("client", refreshedClient);
-
-        return "checkout";
-    }
-
     @PostMapping("/checkout")
     public String processCheckout(
             @RequestParam String fullName,
@@ -225,6 +156,7 @@ public class HomepageController {
             @RequestParam String cvv,
 
             HttpSession session,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
         Client client = (Client) session.getAttribute("loggedInClient");
@@ -233,8 +165,7 @@ public class HomepageController {
             return "redirect:/login-register";
         }
 
-        //SIMULATE PAYMENT PROCESSING
-
+        // SIMULATE PAYMENT PROCESSING
         String cleanedCardNumber = cardNumber.replaceAll("\\s", "");
         boolean paymentSuccessful = VALID_TEST_CARDS.containsKey(cleanedCardNumber);
 
@@ -279,9 +210,86 @@ public class HomepageController {
 
             return "redirect:/checkout";
         } else {
-            // Handle failed payment (e.g., redirect with an error message)
-            redirectAttributes.addAttribute("error", "Payment failed. Please try again.");
-            return "redirect:/checkout";
+            // --- FAILED PAYMENT LOGIC (Retain form data) ---
+
+            // 1. Re-add the submitted form data to the model
+            model.addAttribute("fullName", fullName);
+            model.addAttribute("cardNumber", cardNumber);
+            model.addAttribute("expiry", expiry);
+            model.addAttribute("cvv", cvv);
+
+            // 2. Add the error message to the model
+            model.addAttribute("error", "Payment failed. Please check your card details and try again.");
+
+            // 3. Call the logic to re-populate the Model with cart/totals and render the view
+            return viewCheckoutInternal(client, model);
         }
+    }
+
+    private String viewCheckoutInternal(Client client, Model model) {
+        // This logic is copied/moved from the original @GetMapping("/checkout") method body
+        Optional<Client> refreshedClientOpt = clientRepository.findById((int) client.getId());
+        if (refreshedClientOpt.isEmpty()) {
+            // If client disappears during checkout (very rare), redirect to login
+            return "redirect:/login-register";
+        }
+
+        Client refreshedClient = refreshedClientOpt.get();
+        List<Long> cartBookIds = refreshedClient.getShoppingCart();
+
+        // 1. Count occurrences of each book ID
+        Map<Long, Integer> bookIdCounts = new HashMap<>();
+        for (Long bookId : cartBookIds) {
+            bookIdCounts.put(bookId, bookIdCounts.getOrDefault(bookId, 0) + 1);
+        }
+
+        // 2. Create list of CartItemView DTOs
+        List<CartItemView> cartItemsView = new ArrayList<>();
+        double subtotal = 0.0;
+
+        for (Map.Entry<Long, Integer> entry : bookIdCounts.entrySet()) {
+            Long bookId = entry.getKey();
+            int quantity = entry.getValue();
+
+            // Use Long for findById
+            Optional<Book> bookOpt = Optional.ofNullable(bookRepository.findById(bookId));
+
+            if (bookOpt.isPresent()) {
+                Book book = bookOpt.get();
+                CartItemView cartItem = new CartItemView(book, quantity);
+                cartItemsView.add(cartItem);
+                subtotal += cartItem.getLineTotal();
+            }
+        }
+        // === END: Grouping Logic ===
+
+        final double SHIPPING_COST = subtotal > 0 ? 5.00 : 0.00;
+        final double TAX_RATE = 0.07;
+
+        double tax = subtotal * TAX_RATE;
+        double total = subtotal + tax + SHIPPING_COST;
+
+        // Pass the grouped list to the model
+        model.addAttribute("cartItems", cartItemsView);
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("shippingCost", SHIPPING_COST);
+        model.addAttribute("tax", tax);
+        model.addAttribute("orderTotal", total);
+        model.addAttribute("client", refreshedClient);
+
+        return "checkout";
+    }
+
+    // --- Update @GetMapping("/checkout") to use the new helper method ---
+    @GetMapping("/checkout")
+    public String viewCheckout(HttpSession session, Model model) {
+        Client client = (Client) session.getAttribute("loggedInClient");
+
+        if (client == null) {
+            return "redirect:/login-register";
+        }
+
+        // Call the helper method to populate the model and return the view
+        return viewCheckoutInternal(client, model);
     }
 }
