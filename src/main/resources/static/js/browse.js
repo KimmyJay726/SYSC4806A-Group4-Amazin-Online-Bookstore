@@ -171,14 +171,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Show or hide Add button
                 const addBtn = document.getElementById(`addToCart-${bookId}`);
-                addBtn.style.visibility = (clientCopies < maxBooks) ? "visible" : "hidden";
+                if (addBtn) {
+                    addBtn.style.display = (clientCopies < maxBooks) ? "" : "none";
+                }
 
                 // Show or hide Remove button
                 const removeBtn = document.getElementById(`removeFromCart-${bookId}`);
-                removeBtn.style.visibility = (clientCopies > 0) ? "visible" : "hidden";
-
-                // Reload page to ensure visibility changes are applied by the browser
-                window.location.reload();
+                if (removeBtn) {
+                    removeBtn.style.display = (clientCopies > 0) ? "" : "none";
+                }
             })
             .catch(err => console.error("Error refreshing buttons:", err));
     }
