@@ -90,8 +90,15 @@ public class HomepageController {
             HttpSession session,
             Model model) {
 
-        // Add client information for navbar
         Client client = (Client) session.getAttribute("loggedInClient");
+
+        // Check if user is not logged in or is not an owner
+        if (client == null || Boolean.TRUE.equals(client.getIsOwner())) {
+            // Redirect to login page if not logged in or not an owner
+            return "redirect:/login-register?error=unauthorized";
+        }
+
+        // Add client information for navbar
         if (client != null) {
             model.addAttribute("client", client);
             model.addAttribute("username", client.getUsername());
