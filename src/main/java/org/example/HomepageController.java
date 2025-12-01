@@ -17,6 +17,20 @@ import java.util.*;
 @Controller
 public class HomepageController {
 
+    private static final Map<String, List<String>> VALID_TEST_CARDS;
+
+    static {
+        Map<String, List<String>> aMap = new HashMap<>();
+
+        aMap.put("1111222233334444", Arrays.asList("12/26", "444"));
+
+        aMap.put("5555666677778888", Arrays.asList("08/27", "888"));
+
+        aMap.put("0000111100001111", Arrays.asList("06/28", "111"));
+
+        VALID_TEST_CARDS = Collections.unmodifiableMap(aMap);
+    }
+
     @Autowired
     private Jaccard jaccard;
 
@@ -62,17 +76,13 @@ public class HomepageController {
         //TODO make it cross-check each filter.
         if (isbn != null && !isbn.isEmpty()) {
             books = bookRepository.findByBookISBN(isbn);
-        }
-        else if (title != null && !title.isEmpty()) {
+        } else if (title != null && !title.isEmpty()) {
             books = bookRepository.findByBookTitle(title);
-        }
-        else if (author != null && !author.isEmpty()) {
+        } else if (author != null && !author.isEmpty()) {
             books = bookRepository.findByBookAuthor(author);
-        }
-        else if (publisher != null && !publisher.isEmpty()) {
+        } else if (publisher != null && !publisher.isEmpty()) {
             books = bookRepository.findByBookPublisher(publisher);
-        }
-        else {
+        } else {
             books = (List<Book>) bookRepository.findAll();
         }
 
@@ -110,9 +120,7 @@ public class HomepageController {
                 recommendedBooks.add(bookRepository.findById(bookId));
             }
             model.addAttribute("books", recommendedBooks);
-        }
-
-        else {
+        } else {
             List<Book> recommendedBooks = (List<Book>) bookRepository.findAll();
             model.addAttribute("books", recommendedBooks);
         }
@@ -140,10 +148,16 @@ public class HomepageController {
         }
     }
 
+    @PostMapping("/checkout")
+    public String processCheckout(
+            @RequestParam String fullName,
+            @RequestParam String cardNumber,
+            @RequestParam String expiry,
+            @RequestParam String cvv,
 
-
-    @GetMapping("/checkout")
-    public String viewCheckout(HttpSession session, Model model) {
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         Client client = (Client) session.getAttribute("loggedInClient");
 
@@ -151,9 +165,72 @@ public class HomepageController {
             return "redirect:/login-register";
         }
 
-        // Use Long for findById
+        // SIMULATE PAYMENT PROCESSING
+        String cleanedCardNumber = cardNumber.replaceAll("\\s", "");
+        boolean paymentSuccessful = VALID_TEST_CARDS.containsKey(cleanedCardNumber);
+
+        if (paymentSuccessful) {
+            List<String> cardDetails = VALID_TEST_CARDS.get(cleanedCardNumber);
+            String validExpiry = cardDetails.get(0);
+            String validCvv = cardDetails.get(1);
+
+            // If the expiry or CVV do not match the expected test values, fail the payment.
+            if (!validExpiry.equals(expiry) || !validCvv.equals(cvv)) {
+                paymentSuccessful = false;
+            }
+        }
+
+        if (paymentSuccessful) {
+
+            for (Long bookId : client.getShoppingCart()) {
+
+                Integer numAvailableCopies = bookRepository.findById(bookId).getNumBooksAvailableForPurchase();
+                Book purchasedBook = bookRepository.findById(bookId);
+
+                // Add the ID of the copy of the book to the client's purchasedBookIds
+                client.addToPurchasedBooks(bookId);
+
+                // Decrement the number of copies of the book in the inventory by 1
+                purchasedBook.setNumBooksAvailableForPurchase(numAvailableCopies - 1);
+                bookRepository.save(purchasedBook);
+            }
+
+            // Clear the cart on the Client object (requires the clearShoppingCart() method in Client.java)
+            client.clearShoppingCart();
+
+            // Save the updated Client object (with the empty cart) to the database
+            clientRepository.save(client);
+
+            //Update the session with the newly saved client object
+            session.setAttribute("loggedInClient", client);
+
+            // Redirect back to the GET /checkout with a 'success' parameter
+            // The GET method will see this parameter and display the "Payment Complete" feedback.
+            redirectAttributes.addAttribute("success", "true");
+
+            return "redirect:/checkout";
+        } else {
+            // --- FAILED PAYMENT LOGIC (Retain form data) ---
+
+            // 1. Re-add the submitted form data to the model
+            model.addAttribute("fullName", fullName);
+            model.addAttribute("cardNumber", cardNumber);
+            model.addAttribute("expiry", expiry);
+            model.addAttribute("cvv", cvv);
+
+            // 2. Add the error message to the model
+            model.addAttribute("error", "Payment failed. Please check your card details and try again.");
+
+            // 3. Call the logic to re-populate the Model with cart/totals and render the view
+            return viewCheckoutInternal(client, model);
+        }
+    }
+
+    private String viewCheckoutInternal(Client client, Model model) {
+        // This logic is copied/moved from the original @GetMapping("/checkout") method body
         Optional<Client> refreshedClientOpt = clientRepository.findById((int) client.getId());
         if (refreshedClientOpt.isEmpty()) {
+            // If client disappears during checkout (very rare), redirect to login
             return "redirect:/login-register";
         }
 
@@ -186,7 +263,7 @@ public class HomepageController {
         }
         // === END: Grouping Logic ===
 
-        final double SHIPPING_COST = subtotal > 0 ? 5.00 : 0.00; // Only charge shipping if there are items
+        final double SHIPPING_COST = subtotal > 0 ? 5.00 : 0.00;
         final double TAX_RATE = 0.07;
 
         double tax = subtotal * TAX_RATE;
@@ -203,57 +280,16 @@ public class HomepageController {
         return "checkout";
     }
 
-    @PostMapping("/checkout")
-    public String processCheckout(
-            @RequestParam String fullName,
-            @RequestParam String cardNumber, // Captures the credit card number from the form
-            // Add other form fields here: @RequestParam String expiry, @RequestParam String cvv,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
-
+    // --- Update @GetMapping("/checkout") to use the new helper method ---
+    @GetMapping("/checkout")
+    public String viewCheckout(HttpSession session, Model model) {
         Client client = (Client) session.getAttribute("loggedInClient");
 
         if (client == null) {
             return "redirect:/login-register";
         }
 
-        //SIMULATE PAYMENT PROCESSING
-
-        boolean paymentSuccessful = true;
-
-        if (paymentSuccessful) {
-
-            for (Long bookId : client.getShoppingCart()) {
-
-                Integer numAvailableCopies = bookRepository.findById(bookId).getNumBooksAvailableForPurchase();
-                Book purchasedBook = bookRepository.findById(bookId);
-
-                // Add the ID of the copy of the book to the client's purchasedBookIds
-                client.addToPurchasedBooks(bookId);
-
-                // Decrement the number of copies of the book in the inventory by 1
-                purchasedBook.setNumBooksAvailableForPurchase(numAvailableCopies - 1);
-                bookRepository.save(purchasedBook);
-            }
-
-            // Clear the cart on the Client object (requires the clearShoppingCart() method in Client.java)
-            client.clearShoppingCart();
-
-            // Save the updated Client object (with the empty cart) to the database
-            clientRepository.save(client);
-
-            //Update the session with the newly saved client object
-            session.setAttribute("loggedInClient", client);
-
-            // Redirect back to the GET /checkout with a 'success' parameter
-            // The GET method will see this parameter and display the "Payment Complete" feedback.
-            redirectAttributes.addAttribute("success", "true");
-
-            return "redirect:/checkout";
-        } else {
-            // Handle failed payment (e.g., redirect with an error message)
-            redirectAttributes.addAttribute("error", "Payment failed. Please try again.");
-            return "redirect:/checkout";
-        }
+        // Call the helper method to populate the model and return the view
+        return viewCheckoutInternal(client, model);
     }
 }
