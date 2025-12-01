@@ -4,30 +4,23 @@ The goal of this project is to develop an **online bookstore application** with 
 
 ---
 
-## Project Status: Current Sprint (Sprint #4)
+## Project Status: Current Sprint (Sprint #6)
 
-Kanban board status as of: **November 15, 2025**
+Kanban board status as of: **December 1, 2025**
 
-|Kanban Column	|Key Deliverables/Issues|
-|---|-|
-| **Done** | - Create recommendations HTML page and add recommendations feature (**#5**)<br>- Add logging to java classes (**#59**)<br>- Add Shopping Cart Nav button to top Nav Bar (**#34**)<br>- Add buttons to add/remove book to/from Shopping Cart (**#35**)<br>- Add tests for testing endpoints (**#61**)<br>- Add purchasing logic (**#62**)<br>- Add Logging (Project Topic) (**#21**)<br> - Add Logging documentation (**#67**) |
-| **In Progress** | - Setup Loki Grafana with Microsoft Azure (**#57**)<br>- Create video explaining Loki Grafana |
-| **To Do** | - Add MockMVC tests (**#56**) |
-| **In Review** | - Add logging errors (**#68**) |
+|Kanban Column	| Key Deliverables/Issues                                                                                                                                                                                                                                                                                                                                                                                                       |
+|---|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Done** | - Created and maintained mock MVC tests (#56)<br>- Fixed a bug where action buttons would disappear on search (#73)<br>- Regenerated UML (#78)<br>- Enhanced purchase page (#63)<br>- Added credit card validation and simulated credit cards (#44)<br>- Removed stock decrement on add to cart (#74)<br>- Added route back to homepage from Login page (#51)<br>- Added favicon (#47)<br>- Fixed purchase logic to decrement inventory (#75)<br>- Added tests for recommendations (#66)<br>- Improved and optimized searching (#43)<br>- Improved user interface for admin by adding a floating add book button (#45)<br>- Removed page reloading on button press (#86)<br>
+|
+| **In Progress** | None                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **To Do** | None                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| **In Review** | None                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ---
 
-## Next Sprint Plan (Sprint #5)
+## Next Sprint Plan
 
-Next Sprint Scheduled for: **November 22, 2025**
-
-| Assignee | New Issues |
-|----------|---|
-| **Jake** | Fix recommendations feature so that newly purchased books are not recommended #65, Add tests for recommendations feature #66 |
-| **Fiona** | Add button to route back to homepage from the login page #51 |
-| **Andrew** | Create MockMVC tests #56 |
-| **Jacob** | Add verification to purchasing feature #44 Enhance purchasing page #63 |
-| **Safi** | Add fuzzy matching #43 |
+N/A
 
 ---
 
@@ -48,16 +41,17 @@ This schema is derived directly from the UML diagram.
 
 ### Table: `Books` (Derived from Book Class)
 
-| Field Name | Data Type | Constraints / Description |
-| :--- |:----------| :--- |
-| **id** | `Long`    | **Primary Key**. Unique identifier for the book. |
-| **bookTitle** | `String`  | Title of the book. |
-| **bookISBN** | `String`  | Unique identifier for the book (**ISBN**). |
-| **bookPitcure** | `String`  | Source of the image of the book cover. |
-| **bookDescription** | `String`  | Detailed summary or description of the book. |
-| **bookAuthor** | `String`  | Author's name. |
-| **bookPublisher** | `String`  | Publisher's name. |
-| **bookPrice** | `Double` | Book price. |
+| Field Name                       | Data Type | Constraints / Description                        |
+|:---------------------------------|:----------|:-------------------------------------------------|
+| **id**                           | `Long`    | **Primary Key**. Unique identifier for the book. |
+| **bookTitle**                    | `String`  | Title of the book.                               |
+| **bookISBN**                     | `String`  | Unique identifier for the book (**ISBN**).       |
+| **bookPitcure**                  | `String`  | Source of the image of the book cover.           |
+| **bookDescription**              | `String`  | Detailed summary or description of the book.     |
+| **bookAuthor**                   | `String`  | Author's name.                                   |
+| **bookPublisher**                | `String`  | Publisher's name.                                |
+| **bookPrice**                    | `Double`  | Book price.                                      |
+| **numBooksAvailableForPurchase** | `Integer` | Number of the book in stock.                     |
 
 ### Relationship Table: `Cart` (Handles the `shoppingCart` relationship)
 
